@@ -863,6 +863,7 @@ display: 	block !important;
     transform: translateY(0);
     transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
     cursor: pointer; /* Solo aquí aparece la "manito" */
+	  -webkit-tap-highlight-color: transparent;
 }
 
 /* Efecto hover solo en el texto */
