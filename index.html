@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title data-i18n="page_title">EM MN Tours</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-</script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "Cq9PacH-N_N_hZ344",
-      });
-   })();
-</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="page_title">EM MN Tours</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+     (function(){
+        emailjs.init({ publicKey: "Cq9PacH-N_N_hZ344" });
+     })();
+  </script>
 </head>
 <body>
 
 <header>
-  <div class="logo"><img data-src="logo.png" alt="Logo" class="lazy"></div>
+
   <nav>
     <ul>
       <li><a href="#home" data-section="home" class="active" data-i18n="nav_home">Home</a></li>
       <li><a href="#destinos" data-section="destinos" data-i18n="nav_destinos">Destinos</a></li>
       <li><a href="#resenas" data-section="resenas" data-i18n="nav_resenas">Reseñas</a></li>
-      <li><a href="#surf-trips" data-section="surf-trips" data-i18n="nav_surf">Surf Trips</a></li>
+      <li><a href="#surf-trips" data-section="surf-trips" data-i18n="nav_surf">Galería</a></li>
       <li><a href="#contacto" data-section="contacto" data-i18n="nav_contacto">Contacto</a></li>
     </ul>
   </nav>
@@ -38,77 +34,101 @@
 </header>
 
 <main class="main-background">
-
-  <section id="home" class="section home active">
-    <div class="home-wrapper">
+  
+<section id="home" class="section active">
+  <div class="hero-fijo-horizontal">
+    <div class="hero-texto-izq">
       <h1 data-i18n="home_title">Explora Brasil con Eze y Male</h1>
-      <div class="banner">
-        <img data-src="banner1.jpg" alt="Banner 1" class="lazy">
-        <img data-src="banner2.jpg" alt="Banner 2" class="lazy">
-        <img data-src="banner3.jpg" alt="Banner 3" class="lazy">
-      </div>
-      <div class="tips">
-        <h2 data-i18n="tips_title">Tips de Viaje</h2>
-        <div class="tips-columns">
-          <div class="tip-col">
-            <h3 data-i18n="doc_title">Documentación</h3>
-            <p data-i18n="doc_text">Lleva pasaporte válido y fotocopia de documentos importantes.</p>
-          </div>
-          <div class="tip-col">
-            <h3 data-i18n="moneda_title">Moneda</h3>
-            <p data-i18n="moneda_text">Lleva efectivo y tarjeta de crédito, la app Belo es útil para pagar con PIX.</p>
-          </div>
-          <div class="tip-col">
-            <h3 data-i18n="clima_title">Clima</h3>
-            <p data-i18n="clima_text">Empaca ropa ligera y algo de abrigo para la noche.</p>
-          </div>
-        </div>
-      </div>
+      <p class="hero-subtitle">Fotografía, surf y experiencias auténticas en el litoral brasileño.</p>
+      <a href="#destinos" class="btn-minimal">Descubrir Destinos</a>
+    </div>
+    <div class="hero-imagen-der">
+      <img src="banner1.jpg" alt="Brasil Hero">
+    </div>
+  </div>
 
-<div class="tips personal-trips">
-  <h3>Trips personalizados</h3>
-  <p>Si querés un viaje a medida, contáctanos y lo armamos juntos.</p>
-<a href="#contacto" class="btn-mail">Contactanos</a>
+  <div class="home-wrapper">
+<div class="slider-wrapper" id="slider-banner">
+  <div class="slider-track">
+    <img src="banner2.jpg" class="slide" alt="Foto 1">
+    <img src="buzios.jpg" class="slide" alt="Foto 2">
+    <img src="rio.jpg" class="slide" alt="Foto 3">
+  </div>
+  <div class="slider-dots"></div>
 </div>
 
-    </div>
-  </section>
+<h2 class="titulo-tips-centro" data-i18n="tips_title">Dicas de Viagem</h2>
 
-  <section id="destinos" class="section">
+<div class="grilla-tips-tres">
+  
+  <div class="tarjeta-tip slider-mini" id="slider-doc">
+    <div class="slider-track">
+      <div class="slide-content">
+        <h3 data-i18n="doc_title">Documentación</h3>
+        <p>Llevá pasaporte vigente y fotocopia de documentos importantes.</p>
+      </div>
+      <div class="slide-content">
+        <h3 data-i18n="doc_seguro">Seguro de Viaje</h3>
+        <p>No olvides contratar una cobertura de salud para Brasil.</p>
+      </div>
+    </div>
+    <div class="dots-internos"></div>
+  </div>
+
+  <div class="tarjeta-tip slider-mini" id="slider-moneda">
+    <div class="slider-track">
+      <div class="slide-content">
+        <h3 data-i18n="moneda_title">Moneda</h3>
+        <p>Llevá efectivo y tarjeta; la app Belo es clave para PIX.</p>
+      </div>
+      <div class="slide-content">
+        <h3 data-i18n="moneda_reales">Cambio</h3>
+        <p>El Real es la moneda local. Evitá cambiar en aeropuertos.</p>
+      </div>
+    </div>
+    <div class="dots-internos"></div>
+  </div>
+
+  <div class="tarjeta-tip slider-mini" id="slider-clima">
+    <div class="slider-track">
+      <div class="slide-content">
+        <h3 data-i18n="clima_title">Clima</h3>
+        <p>Ropa ligera para el día y algo de abrigo para la noche.</p>
+      </div>
+      <div class="slide-content">
+        <h3 data-i18n="clima_lluvia">Lluvias</h3>
+        <p>En el litoral brasileño las lluvias suelen ser pasajeras.</p>
+      </div>
+    </div>
+    <div class="dots-internos"></div>
+  </div>
+
+</div>
+</section>
+
+<section id="destinos" class="section">
     <h2 data-i18n="destinos_title">Destinos</h2>
     <div class="cards-container">
       <div class="tour-card" data-destino="Búzios">
         <img class="image" src="buzios.jpg" alt="Búzios">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_buzios">Búzios</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
-        </div>
+        <div class="text-wrapper"><h3 data-i18n="dest_buzios">Búzios</h3><button class="btn-unificado" data-i18n="btn_info">Más Info</button></div>
       </div>
       <div class="tour-card" data-destino="Río de Janeiro">
         <img class="image" src="rio.jpg" alt="Río de Janeiro">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_rio">Río de Janeiro</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
-        </div>
+        <div class="text-wrapper"><h3 data-i18n="dest_rio">Río de Janeiro</h3><button class="btn-unificado" data-i18n="btn_info">Más Info</button></div>
       </div>
       <div class="tour-card" data-destino="Ilha Grande">
         <img class="image" src="ilha.jpg" alt="Ilha Grande">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_ilha">Ilha Grande</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
-        </div>
+        <div class="text-wrapper"><h3 data-i18n="dest_ilha">Ilha Grande</h3><button class="btn-unificado" data-i18n="btn_info">Más Info</button></div>
       </div>
       <div class="tour-card" data-destino="Arraial do Cabo">
         <img class="image" src="arraial.jpg" alt="Arraial do Cabo">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_arraial">Arraial do Cabo</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
-        </div>
+        <div class="text-wrapper"><h3 data-i18n="dest_arraial">Arraial do Cabo</h3><button class="btn-unificado" data-i18n="btn_info">Más Info</button></div>
       </div>
     </div>
-  </section>
+</section>
 
-  <section id="resenas" class="section">
+<section id="resenas" class="section">
     <h2 data-i18n="resenas_title">Lo que dicen nuestros viajeros</h2>
     <div class="resenas-carousel-wrapper">
       <div class="resenas-carousel" id="resenasCarousel">
@@ -121,95 +141,143 @@
       </div>
     </div>
     <div class="cta-experiencia">
-      <a href="mailto:cecikovacsconsultoria@gmail.com" class="btn-mail" data-i18n="btn_experience">Contanos tu experiencia</a>
+      <a href="mailto:ezemagarik@gmail.com" class="btn-mail" data-i18n="btn_experience">Contanos tu experiencia</a>
     </div>
-  </section>
+</section>
 
-  <section id="surf-trips" class="section">
-    <h2 data-i18n="surf_title">Surf Trips</h2>
+<section id="surf-trips" class="section">
+    <h2 data-i18n="surf_title">Galería</h2>
     <div class="surftrips-gallery">
-      <div class="surf-card"><img src="surf2.jpg" alt="Surf Trip 2"></div>
-      <div class="surf-card"><img src="surf3.jpg" alt="Surf Trip 3"></div>
-      <div class="surf-card"><img src="surf4.jpg" alt="Surf Trip 4"></div>
-      <div class="surf-card"><img src="surf5.jpg" alt="Surf Trip 5"></div>
-      <div class="surf-card"><img src="surf6.jpg" alt="Surf Trip 6"></div>
-      <div class="surf-card"><img src="surf7.jpg" alt="Surf Trip 7"></div>
-      <div class="surf-card"><img src="surf8.jpg" alt="Surf Trip 8"></div>
-      <div class="surf-card"><img src="surf9.jpg" alt="Surf Trip 9"></div>
-      <div class="surf-card"><img src="surf10.jpg" alt="Surf Trip 10"></div>
+      <div class="surf-card"><img src="surf2.jpg" alt="Surf 2"></div>
+      <div class="surf-card"><img src="surf3.jpg" alt="Surf 3"></div>
+      <div class="surf-card"><img src="surf4.jpg" alt="Surf 4"></div>
+      <div class="surf-card"><img src="surf5.jpg" alt="Surf 5"></div>
+      <div class="surf-card"><img src="surf6.jpg" alt="Surf 6"></div>
+      <div class="surf-card"><img src="surf7.jpg" alt="Surf 7"></div>
+      <div class="surf-card"><img src="surf8.jpg" alt="Surf 8"></div>
+      <div class="surf-card"><img src="surf9.jpg" alt="Surf 9"></div>
+      <div class="surf-card"><img src="surf10.jpg" alt="Surf 10"></div>
     </div>
-    <p class="surf-info" data-i18n="surf_info">Próximamente más info sobre surf trips, paquetes y experiencias.</p>
-  </section>
+</section>
 
-<section id="contacto" class="section contacto">
-  <h2 data-i18n="contacto_title">Contacto</h2>
+<section id="contacto" class="section">
+  <div class="contacto-container-v3">
+    
+    <div class="contacto-header-flex">
+      <div class="header-left">
+        <h2 data-i18n="contacto_titulo">CONTACTO</h2>
+        <p class="contacto-sub" data-i18n="contacto_sub">¿Listo para tu próxima aventura? Escribinos y coordinamos cada detalle de tu viaje.</p>
+      </div>
+      
+      <div class="header-right">
+        <div class="social-buttons">
+          <a href="#" class="s-btn">INSTAGRAM</a>
+          <a href="#" class="s-btn">FACEBOOK</a>
+          <a href="#" class="s-btn">EMAIL</a>
+          <a href="#destinos" class="s-btn dark" data-i18n="btn_reservas">RESERVAS</a>
+        </div>
 
-  <div class="contacto-contenedor">
-    <div class="qr-wrapper">
-      <a href="https://wa.me/19498774072" target="_blank">
-        <img src="qr-wpp.png" alt="Contáctanos por WhatsApp" class="lazy">
-      </a>
+    <div class="qr-prolijo">
+        <img src="qr-wpp.png" alt="WhatsApp QR">
+<a href="https:wa.me/542236681436" target="_blank" class="qr-text-link">
+        WhatsApp Directo
+</a>
     </div>
 
-    <div class="redes-sociales">
-      <a href="https://instagram.com/gary.of" target="_blank" class="btn-unificado" data-i18n="social_instagram">Instagram</a>
-      <a href="https://facebook.com" target="_blank" class="btn-unificado" data-i18n="social_facebook">Facebook</a>
-      <a href="https://ceciltrips.bokun.io" target="_blank" class="btn-unificado" data-i18n="social_reservas">Bokun</a>
+      </div>
     </div>
 
-    <form class="formulario-contacto">
-      <label for="email" data-i18n="form_email_label">Dirección de mail preferida:</label>
-      <input type="email" id="email" name="email" required data-i18n-ph="form_email_ph">
+    <form class="formulario-final-v3">
+      <div class="f-row">
+        <div class="f-group">
+          <label data-i18n="form_mail">DIRECCIÓN DE MAIL PREFERIDA:</label>
+          <input type="email" name="user_email" placeholder="tu@mail.com" required>
+        </div>
+        <div class="f-group">
+          <label data-i18n="form_whatsapp">WHATSAPP:</label>
+          <input type="text" name="user_whatsapp" placeholder="+54...">
+        </div>
+      </div>
 
-      <label for="whatsapp" data-i18n="form_whatsapp_label">WhatsApp:</label>
-      <input type="tel" id="whatsapp" name="whatsapp" required data-i18n-ph="form_whatsapp_ph">
+      <div class="f-row">
+        <div class="f-group">
+          <label data-i18n="form_nombre">NOMBRE:</label>
+          <input type="text" name="user_name" required>
+        </div>
+        <div class="f-group">
+          <label data-i18n="form_personas">CANTIDAD DE PERSONAS:</label>
+          <select name="user_count" class="safari-select-fix">
+            <option value="" data-i18n="select_opt">Seleccionar</option>
+            <option value="1-2">1-2</option>
+            <option value="3-5">3-5</option>
+            <option value="6+">6+</option>
+          </select>
+        </div>
+      </div>
 
-      <label for="nombre" data-i18n="form_nombre_label">Nombre:</label>
-      <input type="text" id="nombre" name="nombre" required data-i18n-ph="form_nombre_ph">
+      <div class="f-row">
+        <div class="f-group">
+          <label data-i18n="form_fecha">FECHA ESTIMADA:</label>
+          <input type="date" name="user_date">
+        </div>
+        <div class="f-group">
+          <label data-i18n="form_servicio">SERVICIO DESEADO:</label>
+          <select name="user_service" class="safari-select-fix">
+            <option value="" data-i18n="select_opt">Seleccionar</option>
+            <option value="surf">Surf Trip</option>
+            <option value="tour">City Tour</option>
+            <option value="transfer">Transfer</option>
+          </select>
+        </div>
+      </div>
 
-      <label for="personas" data-i18n="form_personas_label">Cantidad de personas:</label>
-      <input type="number" id="personas" name="personas" min="1" required data-i18n-ph="form_personas_ph">
+      <div class="f-group full">
+        <label data-i18n="form_comentarios">INFO DEL VUELO / COMENTARIOS:</label>
+        <textarea name="message" rows="2"></textarea>
+      </div>
 
-      <label for="fecha" data-i18n="form_fecha_label">Fecha:</label>
-      <input type="date" id="fecha" name="fecha" required>
-
-      <label for="servicio" data-i18n="form_servicio_label">Servicio deseado:</label>
-      <select id="servicio" name="servicio" required>
-        <option value="" data-i18n="option_select">-- Seleccionar --</option>
-        <option value="tour" data-i18n="option_tour">Tour</option>
-        <option value="surf" data-i18n="option_surf">Surf Trip</option>
-        <option value="transfer" data-i18n="option_transfer">Transfer</option>
-        <option value="hospedaje" data-i18n="option_hospedaje">Hospedaje</option>
-        <option value="otro" data-i18n="option_otro">Otro</option>
-      </select>
-
-      <label for="vuelo" data-i18n="form_vuelo_label">Si es desde o al aeropuerto, info del vuelo:</label>
-      <input type="text" id="vuelo" name="vuelo" data-i18n-ph="form_vuelo_ph">
-
-      <button type="submit" class="btn-unificado" data-i18n="btn_send">Enviar</button>
+      <button type="submit" class="btn-negro-final-v3">
+        <span data-i18n="form_enviar">ENVIAR SOLICITUD</span>
+      </button>
     </form>
+
   </div>
 </section>
 
 
-</main> <div id="destino-detalle" class="modal submenu-overlay">
+
+
+</main>
+
+<div id="destino-detalle" class="modal submenu-overlay">
   <div class="detalle-inner">
     <div class="modal-header">
-      <h2 id="detalle-titulo">Destino</h2> 
-<div class="tabs">
-  <button class="tab-btn btn-unificado"  data-tab="hospedaje" data-i18n="tab_hospedaje">Hospedaje</button>
-  <button class="tab-btn btn-unificado"  data-tab="tours" data-i18n="tab_tours">Tours</button>
-  <button class="tab-btn btn-unificado"  data-tab="transfers" data-i18n="tab_transfers">Transfers</button>
-</div>
-      <button id="volver-btn" button class="tab-btn btn-unificado" data-i18n="volver_btn">Volver</button>
+      <h2 id="detalle-titulo">Destino</h2>
+      <div class="tabs">
+        <button class="tab-btn btn-unificado active" data-tab="hospedaje" data-i18n="tab_hospedaje">Hospedaje</button>
+        <button class="tab-btn btn-unificado" data-tab="tours" data-i18n="tab_tours">Tours</button>
+        <button class="tab-btn btn-unificado" data-tab="transfers" data-i18n="tab_transfers">Transfers</button>
+      </div>
+      <button id="volver-btn" class="tab-btn btn-unificado" data-i18n="volver_btn">Volver</button>
     </div>
-    <div id="hospedaje" class="tab-content"></div>
+    <div id="hospedaje" class="tab-content active"></div>
     <div id="tours" class="tab-content"></div>
     <div id="transfers" class="tab-content"></div>
   </div>
 </div>
 
-<footer>© 2025 Ezequiel Magarik Web. Todos los derechos reservados.</footer>
+<div id="lightbox" class="submenu-overlay">
+    <span class="close-lightbox">&times;</span>
+    <button id="prev-img" class="btn-unificado">❮</button>
+    <img id="lightbox-img" src="" alt="View">
+    <button id="next-img" class="btn-unificado">❯</button>
+</div>
+
+<footer>
+  © 2026 EM MN TOURS
+  <span>EZEQUIEL MAGARIK</span>
+</footer>
+
 <script src="script.js"></script>
 </body>
 </html>
