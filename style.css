@@ -132,9 +132,18 @@ nav ul li a.active,nav ul li a:hover{opacity:1}
 /* ============================================================
    SERVICIOS
    ============================================================ */
-.servicios-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:3px;width:100%}
-.servicio-card{position:relative;overflow:hidden;height:280px;cursor:pointer}
-.servicio-card.grande{grid-row:1/3;height:100%;min-height:563px}
+.servicios-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  grid-template-rows:repeat(3,200px);
+  gap:3px;
+  width:100%;
+}
+.servicio-card{position:relative;overflow:hidden;cursor:pointer}
+.servicio-card img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--snap);display:block}
+.servicio-card:hover img{transform:scale(1.05)}
+.servicio-card.grande{grid-column:1;grid-row:1/4;}
+.servicio-card:not(.grande){grid-column:2;}
 .servicio-card img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--snap);display:block}
 .servicio-card:hover img{transform:scale(1.05)}
 .servicio-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78) 0%,rgba(0,0,0,.06) 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:30px;color:var(--white)}
@@ -223,7 +232,8 @@ footer span{display:block;margin-top:5px;opacity:.8}
   .sobre-layout{grid-template-columns:1fr;gap:32px}
   .sobre-img-col img{height:320px}
   .servicios-grid{grid-template-columns:1fr;grid-template-rows:auto}
-  .servicio-card.grande{grid-row:auto;min-height:320px}
+  .servicio-card.grande{grid-column:1;grid-row:auto;height:320px;}
+  .servicio-card:not(.grande){grid-column:1;height:220px;}
   .proceso-pasos{grid-template-columns:1fr 1fr}
   .paso:nth-child(2){border-right:none}
   .paso:nth-child(1),.paso:nth-child(2){border-bottom:1px solid var(--div)}
