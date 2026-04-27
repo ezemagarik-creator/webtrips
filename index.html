@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="page_title">EM MN Tours</title>
+  <title>Ezequiel Magarik — Web Developer</title>
 
-  <!-- Preconnect for faster font loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- Non-blocking font load -->
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;700&display=swap" onload="this.rel='stylesheet'">
   <noscript>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
@@ -17,243 +14,263 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- EmailJS: initialized once here, removed from script.js -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script type="text/javascript">
-    (function(){
-      emailjs.init({ publicKey: "Cq9PacH-N_N_hZ344" });
-    })();
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    (function(){ emailjs.init({ publicKey: "Cq9PacH-N_N_hZ344" }); })();
   </script>
 </head>
 <body>
 
-<!-- Skip to content link for keyboard users -->
-<a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:#000;color:#fff;padding:8px 16px;z-index:99999;font-size:0.8rem;text-decoration:none;transition:top 0.2s;" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Saltar al contenido</a>
+<a href="#main-content" class="skip-link" onfocus="this.style.top='0'" onblur="this.style.top='-40px'">Saltar al contenido</a>
 
 <header role="banner">
   <nav aria-label="Navegación principal">
     <ul>
-      <li><a href="#home" data-section="home" class="active" data-i18n="nav_home">Home</a></li>
-      <li><a href="#destinos" data-section="destinos" data-i18n="nav_destinos">Destinos</a></li>
-      <li><a href="#resenas" data-section="resenas" data-i18n="nav_resenas">Reseñas</a></li>
-      <li><a href="#surf-trips" data-section="surf-trips" data-i18n="nav_surf">Galería</a></li>
-      <li><a href="#contacto" data-section="contacto" data-i18n="nav_contacto">Contacto</a></li>
+      <li><a href="#home"       data-section="home"       class="active">Home</a></li>
+      <li><a href="#sobre-mi"   data-section="sobre-mi">Sobre mí</a></li>
+      <li><a href="#servicios"  data-section="servicios">Servicios</a></li>
+      <li><a href="#proceso"    data-section="proceso">Proceso</a></li>
+      <li><a href="#contacto"   data-section="contacto">Contacto</a></li>
     </ul>
   </nav>
-  <div class="lang-switch" aria-label="Selector de idioma">
-    <button class="flag-btn" data-lang="es" aria-label="Cambiar idioma a español">🇦🇷</button>
-    <button class="flag-btn" data-lang="en" aria-label="Switch language to English">🇺🇸</button>
-    <button class="flag-btn" data-lang="pt" aria-label="Mudar idioma para português">🇧🇷</button>
-  </div>
+  <div class="header-logo" aria-label="Ezequiel Magarik">EM</div>
 </header>
 
 <main id="main-content" class="main-background">
 
   <!-- ========== HOME ========== -->
   <section id="home" class="section active" aria-label="Inicio">
-    <div class="hero-fijo-horizontal">
-      <div class="hero-texto-izq">
-        <h1 data-i18n="home_title">Explora Brasil con Eze y Male</h1>
-        <p class="hero-subtitle">Fotografía, surf y experiencias auténticas en el litoral brasileño.</p>
-        <a href="#destinos" class="btn-minimal" data-section="destinos">Descubrir Destinos</a>
+
+    <div class="hero-split">
+      <div class="hero-left">
+        <p class="hero-eyebrow">WEB DEVELOPER — MAR DEL PLATA</p>
+        <h1 class="hero-headline">
+          <span class="line">Código</span>
+          <span class="line accent">limpio.</span>
+          <span class="line">Resultados</span>
+          <span class="line accent">reales.</span>
+        </h1>
+        <p class="hero-body">
+          Construyo sitios y experiencias web con HTML, CSS y JavaScript puro.
+          Sin frameworks innecesarios — solo código bien escrito, rápido y accesible.
+        </p>
+        <div class="hero-cta-row">
+          <a href="#contacto" class="btn-filled" data-section="contacto">Trabajemos juntos</a>
+          <a href="#servicios" class="btn-minimal" data-section="servicios">Ver servicios</a>
+        </div>
       </div>
-      <div class="hero-imagen-der">
-        <!-- Hero is above the fold — load eagerly -->
-        <img src="banner1.jpg" alt="Vista panorámica del litoral brasileño con aguas turquesas">
+      <div class="hero-right">
+        <img src="banner1.jpg" alt="Ezequiel Magarik — Web Developer" width="900" height="600" class="hero-img">
+        <div class="hero-badge">
+          <span class="badge-num">100%</span>
+          <span class="badge-label">Vanilla JS</span>
+        </div>
       </div>
     </div>
 
-    <div class="home-wrapper">
+    <!-- Marquee strip -->
+    <div class="marquee-strip" aria-hidden="true">
+      <div class="marquee-track">
+        <span>HTML</span><span>·</span>
+        <span>CSS</span><span>·</span>
+        <span>JAVASCRIPT</span><span>·</span>
+        <span>JSON</span><span>·</span>
+        <span>RESPONSIVE DESIGN</span><span>·</span>
+        <span>ANIMACIONES</span><span>·</span>
+        <span>ACCESIBILIDAD</span><span>·</span>
+        <span>PERFORMANCE</span><span>·</span>
+        <span>SPA</span><span>·</span>
+        <span>HTML</span><span>·</span>
+        <span>CSS</span><span>·</span>
+        <span>JAVASCRIPT</span><span>·</span>
+        <span>JSON</span><span>·</span>
+        <span>RESPONSIVE DESIGN</span><span>·</span>
+        <span>ANIMACIONES</span><span>·</span>
+        <span>ACCESIBILIDAD</span><span>·</span>
+        <span>PERFORMANCE</span><span>·</span>
+        <span>SPA</span><span>·</span>
+      </div>
+    </div>
 
-      <!-- Banner slider — above the fold, load eagerly -->
-      <div class="slider-wrapper" id="slider-banner">
-        <div class="slider-track">
-          <img src="banner2.jpg" class="slide" alt="Playa brasileña al atardecer">
-          <img src="buzios.jpg" class="slide" alt="Costa de Búzios con barcos anclados">
-          <img src="rio.jpg" class="slide" alt="Vista aérea de Río de Janeiro">
+    <!-- Stats -->
+    <div class="home-stats">
+      <div class="stat-card">
+        <span class="stat-n">0kb</span>
+        <span class="stat-l">Dependencias externas</span>
+      </div>
+      <div class="stat-card accent">
+        <span class="stat-n">A+</span>
+        <span class="stat-l">Lighthouse Score</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-n">&lt;1s</span>
+        <span class="stat-l">Tiempo de carga promedio</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-n">100%</span>
+        <span class="stat-l">Proyectos entregados a tiempo</span>
+      </div>
+    </div>
+
+    <!-- Slider de highlights -->
+    <div class="slider-wrapper" id="slider-home">
+      <div class="slider-track">
+        <img src="banner1.jpg" class="slide" alt="Sitio web desarrollado por Ezequiel Magarik" width="1200" height="450" loading="lazy">
+        <img src="banner2.jpg" class="slide" alt="Interfaz responsive" width="1200" height="450" loading="lazy">
+      </div>
+      <div class="slider-dots" role="tablist" aria-label="Slides de trabajo"></div>
+    </div>
+
+  </section>
+
+  <!-- ========== SOBRE MÍ ========== -->
+  <section id="sobre-mi" class="section" aria-label="Sobre mí">
+    <h2>Sobre mí</h2>
+
+    <div class="sobre-layout">
+      <div class="sobre-imagen-col">
+        <div class="sobre-img-frame">
+          <img src="banner2.jpg" alt="Ezequiel Magarik" loading="lazy" width="500" height="620">
         </div>
-        <div class="slider-dots" role="tablist" aria-label="Slides del banner"></div>
       </div>
 
-      <h2 class="titulo-tips-centro" data-i18n="tips_title">Dicas de Viagem</h2>
+      <div class="sobre-texto-col">
+        <p class="sobre-eyebrow">EZE MAGARIK</p>
+        <p class="sobre-parrafo lead">
+          Soy desarrollador web autodidacta de Mar del Plata, Argentina.
+          Me especializo en el front-end: HTML semántico, CSS de alto nivel y
+          JavaScript limpio sin depender de frameworks pesados.
+        </p>
+        <p class="sobre-parrafo">
+          Creo en hacer las cosas bien desde la base — código legible,
+          performance real, y diseños que se ven tan bien en mobile como en desktop.
+          Cada proyecto es una oportunidad de resolver un problema de forma elegante.
+        </p>
+        <p class="sobre-parrafo">
+          Fuera del código, soy apasionado del surf y la fotografía — dos disciplinas
+          que me enseñaron que los mejores resultados vienen de la paciencia,
+          el timing y la atención al detalle.
+        </p>
 
-      <div class="grilla-tips-tres">
-
-        <div class="tarjeta-tip slider-mini" id="slider-doc" aria-label="Consejos de documentación">
-          <div class="slider-track">
-            <div class="slide-content">
-              <h3 data-i18n="doc_title">Documentación</h3>
-              <p>Llevá pasaporte vigente y fotocopia de documentos importantes.</p>
-            </div>
-            <div class="slide-content">
-              <h3 data-i18n="doc_seguro">Seguro de Viaje</h3>
-              <p>No olvides contratar una cobertura de salud para Brasil.</p>
-            </div>
-          </div>
-          <div class="dots-internos" role="tablist"></div>
+        <div class="sobre-skills-grid">
+          <div class="skill-pill">HTML5</div>
+          <div class="skill-pill">CSS3</div>
+          <div class="skill-pill">JavaScript ES6+</div>
+          <div class="skill-pill">JSON / APIs REST</div>
+          <div class="skill-pill">Responsive Design</div>
+          <div class="skill-pill">Animaciones CSS/JS</div>
+          <div class="skill-pill">Accesibilidad (ARIA)</div>
+          <div class="skill-pill">Git / GitHub</div>
+          <div class="skill-pill">EmailJS</div>
+          <div class="skill-pill">SPA sin frameworks</div>
         </div>
 
-        <div class="tarjeta-tip slider-mini" id="slider-moneda" aria-label="Consejos de moneda">
-          <div class="slider-track">
-            <div class="slide-content">
-              <h3 data-i18n="moneda_title">Moneda</h3>
-              <p>Llevá efectivo y tarjeta; la app Belo es clave para PIX.</p>
-            </div>
-            <div class="slide-content">
-              <h3 data-i18n="moneda_reales">Cambio</h3>
-              <p>El Real es la moneda local. Evitá cambiar en aeropuertos.</p>
-            </div>
-          </div>
-          <div class="dots-internos" role="tablist"></div>
+        <div class="sobre-links">
+          <a href="https://www.linkedin.com/in/ezequiel-magarik-97aa24186/" target="_blank" rel="noopener noreferrer" class="btn-minimal">LinkedIn</a>
+          <a href="https://www.instagram.com/gary.of" target="_blank" rel="noopener noreferrer" class="btn-minimal">Instagram</a>
+          <a href="https://wa.me/542236681436" target="_blank" rel="noopener noreferrer" class="btn-filled">WhatsApp</a>
         </div>
-
-        <div class="tarjeta-tip slider-mini" id="slider-clima" aria-label="Consejos de clima">
-          <div class="slider-track">
-            <div class="slide-content">
-              <h3 data-i18n="clima_title">Clima</h3>
-              <p>Ropa ligera para el día y algo de abrigo para la noche.</p>
-            </div>
-            <div class="slide-content">
-              <h3 data-i18n="clima_lluvia">Lluvias</h3>
-              <p>En el litoral brasileño las lluvias suelen ser pasajeras.</p>
-            </div>
-          </div>
-          <div class="dots-internos" role="tablist"></div>
-        </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ========== DESTINOS ========== -->
-  <section id="destinos" class="section" aria-label="Destinos">
-    <h2 data-i18n="destinos_title">Destinos</h2>
-    <div class="cards-container">
+  <!-- ========== SERVICIOS ========== -->
+  <section id="servicios" class="section" aria-label="Servicios">
+    <h2>Servicios</h2>
 
-      <div class="tour-card" data-destino="Búzios">
-        <!-- Lazy: this section is hidden on load -->
-        <img class="image lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="buzios.jpg"
-             alt="Costa de Búzios con sus playas de aguas cristalinas">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_buzios">Búzios</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
+    <div class="servicios-grid">
+
+      <div class="servicio-card grande" data-servicio="landing">
+        <img src="rio.jpg" loading="lazy" alt="Landing pages de alto impacto" width="640" height="380">
+        <div class="servicio-overlay">
+          <span class="servicio-num">01</span>
+          <h3>Landing Pages</h3>
+          <p>Páginas de conversión rápidas, optimizadas y visualmente impactantes.</p>
+          <button class="btn-unificado" aria-label="Ver más sobre Landing Pages">Ver más</button>
         </div>
       </div>
 
-      <div class="tour-card" data-destino="Río de Janeiro">
-        <img class="image lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="rio.jpg"
-             alt="Vista del Cristo Redentor y la bahía de Río de Janeiro">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_rio">Río de Janeiro</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
+      <div class="servicio-card" data-servicio="sitios">
+        <img src="buzios.jpg" loading="lazy" alt="Sitios web completos" width="400" height="280">
+        <div class="servicio-overlay">
+          <span class="servicio-num">02</span>
+          <h3>Sitios Web</h3>
+          <p>Multi-sección, responsive, con SPA navigation.</p>
+          <button class="btn-unificado" aria-label="Ver más sobre Sitios Web">Ver más</button>
         </div>
       </div>
 
-      <div class="tour-card" data-destino="Ilha Grande">
-        <img class="image lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="ilha.jpg"
-             alt="Selva tropical y playa virgen de Ilha Grande">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_ilha">Ilha Grande</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
+      <div class="servicio-card" data-servicio="animaciones">
+        <img src="arraial.jpg" loading="lazy" alt="Animaciones e interacciones" width="400" height="280">
+        <div class="servicio-overlay">
+          <span class="servicio-num">03</span>
+          <h3>Animaciones & UX</h3>
+          <p>Carruseles, modales, micro-interacciones que impresionan.</p>
+          <button class="btn-unificado" aria-label="Ver más sobre Animaciones">Ver más</button>
         </div>
       </div>
 
-      <div class="tour-card" data-destino="Arraial do Cabo">
-        <img class="image lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="arraial.jpg"
-             alt="Aguas turquesas y dunas blancas de Arraial do Cabo">
-        <div class="text-wrapper">
-          <h3 data-i18n="dest_arraial">Arraial do Cabo</h3>
-          <button class="btn-unificado" data-i18n="btn_info">Más Info</button>
+      <div class="servicio-card" data-servicio="optimizacion">
+        <img src="ilha.jpg" loading="lazy" alt="Optimización web" width="400" height="280">
+        <div class="servicio-overlay">
+          <span class="servicio-num">04</span>
+          <h3>Optimización</h3>
+          <p>Performance, Lighthouse, accesibilidad y SEO técnico.</p>
+          <button class="btn-unificado" aria-label="Ver más sobre Optimización">Ver más</button>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- ========== RESEÑAS ========== -->
-  <section id="resenas" class="section" aria-label="Reseñas de viajeros">
-    <h2 data-i18n="resenas_title">Lo que dicen nuestros viajeros</h2>
-    <div class="resenas-carousel-wrapper" role="region" aria-label="Carrusel de reseñas">
-      <div class="resenas-carousel" id="resenasCarousel">
-        <div class="resena" data-i18n="resena_1">Increíble experiencia en Búzios, volveré pronto.</div>
-        <div class="resena" data-i18n="resena_2">El tour de Río fue perfecto, atención excelente.</div>
-        <div class="resena" data-i18n="resena_3">Ilha Grande es un paraíso, muy recomendable.</div>
-        <div class="resena" data-i18n="resena_4">Atención y organización impecables, repetiría sin dudar.</div>
-        <div class="resena" data-i18n="resena_5">Los guías locales hicieron que todo fuera único.</div>
-        <div class="resena" data-i18n="resena_6">La experiencia de surf fue fantástica, muy seguro y divertido.</div>
-      </div>
-    </div>
-    <div class="cta-experiencia">
-      <a href="mailto:ezemagarik@gmail.com" class="btn-mail" data-i18n="btn_experience">Contanos tu experiencia</a>
-    </div>
-  </section>
+  <!-- ========== PROCESO ========== -->
+  <section id="proceso" class="section" aria-label="Proceso de trabajo">
+    <h2>Proceso</h2>
 
-  <!-- ========== GALERÍA ========== -->
-  <section id="surf-trips" class="section" aria-label="Galería de fotos">
-    <h2 data-i18n="surf_title">Galería</h2>
-    <div class="surftrips-gallery" role="list">
+    <div class="proceso-wrapper">
 
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf2.jpg"
-             alt="Surfista tomando una ola en la costa brasileña">
+      <!-- Carrusel de testimonios / filosofía -->
+      <div class="resenas-carousel-wrapper" role="region" aria-label="Principios de trabajo">
+        <div class="resenas-carousel" id="resenasCarousel">
+          <div class="resena">"El mejor código es el que no necesita explicación. Escribo cada línea pensando en el próximo desarrollador que la va a leer — que muchas veces soy yo mismo."</div>
+          <div class="resena">"Mobile-first no es una opción, es el punto de partida. Si no funciona en un teléfono de gama media, no está terminado."</div>
+          <div class="resena">"La performance no es un extra. Un segundo de carga extra cuesta conversiones reales. Cada kilobyte cuenta."</div>
+          <div class="resena">"Los frameworks son herramientas, no muletas. Si puedo resolverlo con HTML, CSS y JS puro — lo hago."</div>
+          <div class="resena">"La accesibilidad beneficia a todos, no solo a quienes la necesitan. ARIA, contraste, foco de teclado: detalles que separan el trabajo amateur del profesional."</div>
+          <div class="resena">"Un cliente feliz no es el que recibe exactamente lo que pidió — es el que recibe lo que necesitaba."</div>
+        </div>
       </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf3.jpg"
-             alt="Vista del lineup desde el agua">
-      </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf4.jpg"
-             alt="Atardecer sobre las olas con silueta de surfista">
-      </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf5.jpg"
-             alt="Grupo de surfistas en la orilla">
-      </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf6.jpg"
-             alt="Ola rompiendo en Arraial do Cabo">
-      </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf7.jpg"
-             alt="Fotografía aérea de playa con olas largas">
-      </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf8.jpg"
-             alt="Surfista en maniobra sobre ola">
-      </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf9.jpg"
-             alt="Playa desierta al amanecer">
-      </div>
-      <div class="surf-card" role="listitem">
-        <img class="lazy"
-             src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
-             data-src="surf10.jpg"
-             alt="Equipo de surf en la arena">
+
+      <!-- Pasos del proceso -->
+      <div class="proceso-pasos">
+        <div class="paso">
+          <div class="paso-num">01</div>
+          <div class="paso-content">
+            <h3>Brief & Propuesta</h3>
+            <p>Escucho qué necesitás, analizo el contexto y propongo una solución concreta con tiempos y presupuesto claro.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-num">02</div>
+          <div class="paso-content">
+            <h3>Diseño & Estructura</h3>
+            <p>Defino la arquitectura del sitio, la paleta visual y el layout antes de escribir una sola línea de código.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-num">03</div>
+          <div class="paso-content">
+            <h3>Desarrollo</h3>
+            <p>HTML semántico, CSS bien estructurado y JS limpio. Sin atajos — cada componente construido para durar.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-num">04</div>
+          <div class="paso-content">
+            <h3>Revisión & Entrega</h3>
+            <p>Pruebas en múltiples dispositivos, ajustes finales y entrega con soporte post-lanzamiento.</p>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -265,23 +282,20 @@
 
       <div class="contacto-header-flex">
         <div class="header-left">
-          <h2 data-i18n="contacto_titulo">CONTACTO</h2>
-          <p class="contacto-sub" data-i18n="contacto_sub">¿Listo para tu próxima aventura? Escribinos y coordinamos cada detalle de tu viaje.</p>
+          <h2>CONTACTO</h2>
+          <p class="contacto-sub">¿Tenés un proyecto en mente? Contame de qué se trata y te respondo en menos de 24 horas.</p>
         </div>
 
         <div class="header-right">
           <div class="social-buttons">
-            <a href="#" class="s-btn" aria-label="Seguinos en Instagram">INSTAGRAM</a>
-            <a href="#" class="s-btn" aria-label="Seguinos en Facebook">FACEBOOK</a>
-            <a href="mailto:ezemagarik@gmail.com" class="s-btn" aria-label="Envianos un email">EMAIL</a>
-            <a href="#destinos" class="s-btn dark" data-section="destinos" data-i18n="btn_reservas" aria-label="Ir a reservas">RESERVAS</a>
+            <a href="https://www.instagram.com/gary.of" target="_blank" rel="noopener noreferrer" class="s-btn" aria-label="Instagram">INSTAGRAM</a>
+            <a href="https://www.linkedin.com/in/ezequiel-magarik-97aa24186/" target="_blank" rel="noopener noreferrer" class="s-btn" aria-label="LinkedIn">LINKEDIN</a>
+            <a href="#" class="s-btn js-mailto-btn" aria-label="Email">EMAIL</a>
+            <a href="https://wa.me/542236681436" target="_blank" rel="noopener noreferrer" class="s-btn dark" aria-label="WhatsApp">WHATSAPP</a>
           </div>
-
-          <div class="qr-prolijo" role="img" aria-label="Código QR para contacto por WhatsApp">
-            <img src="qr-wpp.png" alt="QR de WhatsApp para contacto directo">
-            <a href="https://wa.me/542236681436" target="_blank" rel="noopener noreferrer" class="qr-text-link">
-              WhatsApp Directo
-            </a>
+          <div class="qr-prolijo" role="img" aria-label="QR WhatsApp">
+            <img src="qr-wpp.png" alt="QR WhatsApp Ezequiel Magarik" width="110" height="110">
+            <a href="https://wa.me/542236681436" target="_blank" rel="noopener noreferrer" class="qr-text-link">WhatsApp Directo</a>
           </div>
         </div>
       </div>
@@ -289,54 +303,49 @@
       <form class="formulario-final-v3" novalidate>
         <div class="f-row">
           <div class="f-group">
-            <label for="user_email" data-i18n="form_mail">DIRECCIÓN DE MAIL PREFERIDA:</label>
-            <input type="email" id="user_email" name="user_email" placeholder="tu@mail.com" required autocomplete="email">
-          </div>
-          <div class="f-group">
-            <label for="user_whatsapp" data-i18n="form_whatsapp">WHATSAPP:</label>
-            <input type="tel" id="user_whatsapp" name="user_whatsapp" placeholder="+54..." autocomplete="tel">
-          </div>
-        </div>
-
-        <div class="f-row">
-          <div class="f-group">
-            <label for="user_name" data-i18n="form_nombre">NOMBRE:</label>
+            <label for="user_name">NOMBRE:</label>
             <input type="text" id="user_name" name="user_name" required autocomplete="given-name">
           </div>
           <div class="f-group">
-            <label for="user_count" data-i18n="form_personas">CANTIDAD DE PERSONAS:</label>
-            <select id="user_count" name="user_count" class="safari-select-fix">
-              <option value="" data-i18n="select_opt">Seleccionar</option>
-              <option value="1-2">1-2</option>
-              <option value="3-5">3-5</option>
-              <option value="6+">6+</option>
-            </select>
+            <label for="user_email">EMAIL:</label>
+            <input type="email" id="user_email" name="user_email" placeholder="tu@mail.com" required autocomplete="email">
           </div>
         </div>
 
         <div class="f-row">
           <div class="f-group">
-            <label for="user_date" data-i18n="form_fecha">FECHA ESTIMADA:</label>
-            <input type="date" id="user_date" name="user_date">
+            <label for="user_service">SERVICIO:</label>
+            <select id="user_service" name="user_service" class="safari-select-fix">
+              <option value="">Seleccionar</option>
+              <option value="landing">Landing Page</option>
+              <option value="sitio">Sitio Web Completo</option>
+              <option value="animaciones">Animaciones / UX</option>
+              <option value="optimizacion">Optimización</option>
+              <option value="otro">Otro</option>
+            </select>
           </div>
           <div class="f-group">
-            <label for="user_service" data-i18n="form_servicio">SERVICIO DESEADO:</label>
-            <select id="user_service" name="user_service" class="safari-select-fix">
-              <option value="" data-i18n="select_opt">Seleccionar</option>
-              <option value="surf">Surf Trip</option>
-              <option value="tour">City Tour</option>
-              <option value="transfer">Transfer</option>
+            <label for="user_budget">PRESUPUESTO ESTIMADO:</label>
+            <select id="user_budget" name="user_budget" class="safari-select-fix">
+              <option value="">Seleccionar</option>
+              <option value="bajo">Hasta USD 300</option>
+              <option value="medio">USD 300 – 800</option>
+              <option value="alto">USD 800+</option>
             </select>
           </div>
         </div>
 
         <div class="f-group full">
-          <label for="message" data-i18n="form_comentarios">INFO DEL VUELO / COMENTARIOS:</label>
-          <textarea id="message" name="message" rows="2"></textarea>
+          <label for="message">CONTAME TU PROYECTO:</label>
+          <textarea id="message" name="message" rows="3"></textarea>
+        </div>
+
+        <div class="hp-field" aria-hidden="true">
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off">
         </div>
 
         <button type="submit" class="btn-negro-final-v3">
-          <span data-i18n="form_enviar">ENVIAR SOLICITUD</span>
+          <span>ENVIAR MENSAJE</span>
         </button>
       </form>
 
@@ -345,45 +354,25 @@
 
 </main>
 
-<!-- ========== MODAL DESTINOS ========== -->
-<div id="destino-detalle"
+<!-- ========== MODAL SERVICIOS ========== -->
+<div id="servicio-detalle"
      class="modal submenu-overlay"
      role="dialog"
      aria-modal="true"
-     aria-labelledby="detalle-titulo"
+     aria-labelledby="servicio-titulo"
      aria-hidden="true">
   <div class="detalle-inner">
     <div class="modal-header">
-      <h2 id="detalle-titulo">Destino</h2>
-      <div class="tabs" role="tablist">
-        <button class="tab-btn btn-unificado active" data-tab="hospedaje" role="tab" aria-selected="true" aria-controls="hospedaje" data-i18n="tab_hospedaje">Hospedaje</button>
-        <button class="tab-btn btn-unificado" data-tab="tours" role="tab" aria-selected="false" aria-controls="tours" data-i18n="tab_tours">Tours</button>
-        <button class="tab-btn btn-unificado" data-tab="transfers" role="tab" aria-selected="false" aria-controls="transfers" data-i18n="tab_transfers">Transfers</button>
-      </div>
-      <button id="volver-btn" class="tab-btn btn-unificado" aria-label="Cerrar modal" data-i18n="volver_btn">Volver</button>
+      <h2 id="servicio-titulo">Servicio</h2>
     </div>
-    <div id="hospedaje" class="tab-content active" role="tabpanel" aria-labelledby="tab-hospedaje"></div>
-    <div id="tours" class="tab-content" role="tabpanel" aria-labelledby="tab-tours"></div>
-    <div id="transfers" class="tab-content" role="tabpanel" aria-labelledby="tab-transfers"></div>
+    <div id="servicio-body" class="tab-content active"></div>
+    <button id="volver-btn" class="volver-btn-modal" aria-label="Cerrar modal">✕ CERRAR</button>
   </div>
 </div>
 
-<!-- ========== LIGHTBOX ========== -->
-<div id="lightbox"
-     class="submenu-overlay"
-     role="dialog"
-     aria-modal="true"
-     aria-label="Visor de imágenes"
-     aria-hidden="true">
-  <span class="close-lightbox" role="button" tabindex="0" aria-label="Cerrar visor">&times;</span>
-  <button id="prev-img" class="btn-unificado" aria-label="Imagen anterior">❮</button>
-  <img id="lightbox-img" src="" alt="">
-  <button id="next-img" class="btn-unificado" aria-label="Imagen siguiente">❯</button>
-</div>
-
 <footer role="contentinfo">
-  © 2026 EM MN TOURS
-  <span>EZEQUIEL MAGARIK</span>
+  © 2026 EZEQUIEL MAGARIK
+  <span>WEB DEVELOPER — MAR DEL PLATA, AR</span>
 </footer>
 
 <script src="script.js"></script>
