@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---- obfuscated email ---- */
-  const mail = ['gary.edlm','gmail.com'].join('@');
+  const mail = ['ezemagarik','gmail.com'].join('@');
   $$('.js-mailto-btn').forEach(el => { el.href = 'mailto:' + mail; });
 
   /* ---- init ---- */
