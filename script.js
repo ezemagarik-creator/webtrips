@@ -1,42 +1,99 @@
 /**
- * ARCHIVO: script.js
- * FUNCIÓN: Control total de la SPA, Galería, Destinos, Traducciones y UI.
- * ESTADO: 100% Completo y Unificado.
+ * script.js — Ezequiel Magarik Portfolio
+ * Preserved features: SPA routing, focus trap, IntersectionObserver carousel,
+ * debounced resize, EmailJS form, honeypot, obfuscated email, QR toggle,
+ * nav indicator, slider engine, modal system.
  */
 
 // ============================
-// 1. ATAJOS Y UTILIDADES
+// 1. UTILS
 // ============================
-const $ = (selector, scope = document) => scope.querySelector(selector);
-const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+const $ = (sel, scope = document) => scope.querySelector(sel);
+const $$ = (sel, scope = document) => Array.from(scope.querySelectorAll(sel));
 
+function getFocusable(container) {
+  return Array.from(container.querySelectorAll(
+    'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  )).filter(el => !el.closest('[aria-hidden="true"]'));
+}
+
+function trapFocus(modal, e) {
+  const focusable = getFocusable(modal);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last  = focusable[focusable.length - 1];
+  if (e.shiftKey) {
+    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+  } else {
+    if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+  }
+}
+
+// ============================
+// 2. DATA — SERVICIOS
+// ============================
+const serviciosData = {
+  landing: {
+    titulo: 'Landing Pages',
+    items: [
+      'Diseño y desarrollo desde cero, sin plantillas',
+      'Optimizada para conversión y velocidad de carga',
+      'Responsive: perfecta en mobile, tablet y desktop',
+      'Integración de formularios con EmailJS o WhatsApp',
+      'Animaciones y micro-interacciones en CSS/JS puro',
+      'Entrega en 5–10 días hábiles',
+    ]
+  },
+  sitios: {
+    titulo: 'Sitios Web Completos',
+    items: [
+      'Arquitectura SPA (Single Page Application) sin frameworks',
+      'Multi-sección con navegación animada y transiciones fluidas',
+      'Galería, carruseles, lightbox y modales personalizados',
+      'Sistema de internacionalización (i18n) con JSON',
+      'Soporte post-entrega incluido',
+      'Código limpio y documentado para fácil mantenimiento',
+    ]
+  },
+  animaciones: {
+    titulo: 'Animaciones & UX',
+    items: [
+      'Carruseles auto-play con drag táctil y swipe',
+      'Lightbox con navegación por teclado y foco accesible',
+      'Modales con focus trap y transiciones suaves',
+      'Indicadores de navegación animados',
+      'Efectos parallax y scroll-triggered',
+      'Micro-interacciones que mejoran la experiencia del usuario',
+    ]
+  },
+  optimizacion: {
+    titulo: 'Optimización',
+    items: [
+      'Auditoría completa con Lighthouse (Performance, SEO, A11y)',
+      'Lazy loading de imágenes y recursos',
+      'Reducción de CLS, LCP y FID',
+      'Código ARIA semántico y navegación por teclado',
+      'Minificación y optimización de assets',
+      'Informe detallado con métricas antes/después',
+    ]
+  }
+};
+
+// ============================
+// 3. DOM READY
+// ============================
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- Referencias Principales ---
-  const header = $('header');
-  const mainBackground = $('.main-background');
-  const sections = $$('.section');
-  const allSpaLinks = $$('a[href^="#"]'); 
-  const sectionById = Object.fromEntries(sections.map(s => [s.id, s]));
-  const sectionOrder = ['home', 'destinos', 'resenas', 'surf-trips', 'contacto'];
-  
-  // --- Estados Globales ---
-  let currentId = location.hash?.replace('#', '') || 'home';
-  let isAnimating = false;
-  let destinosData = {};
-  let translations = {};
-  let currentLang = localStorage.getItem('lang') || 'es';
+  const header       = $('header');
+  const sections     = $$('.section');
+  const allSpaLinks  = $$('a[href^="#"], a[data-section]');
+  const sectionById  = Object.fromEntries(sections.map(s => [s.id, s]));
+  const sectionOrder = ['home', 'sobre-mi', 'servicios', 'proceso', 'contacto'];
 
-  // --- UI: Subtítulos del Header ---
-  const headerSubtitle = $('#header-subtitle');
-  const subtitleTexts = {
-    'destinos': 'Nuestros Destinos',
-    'resenas': 'Reseñas de Viajeros',
-    'surf-trips': 'Explora un Surf Trip',
-    'contacto': 'Contactanos',
-  };
+  let currentId    = location.hash?.replace('#','') || 'home';
+  let isAnimating  = false;
 
-  // --- UI: Indicador Nav (La línea que se mueve) ---
+  // --- Nav Indicator ---
   let navIndicator = $('.nav-indicator');
   if (!navIndicator) {
     navIndicator = document.createElement('div');
@@ -45,506 +102,299 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ============================
-  // 3. LÓGICA DE NAVEGACIÓN (SPA)
+  // 4. EMAIL OBFUSCATED
   // ============================
+  const mail = ['ezemagarik', 'gmail.com'].join('@');
+  $$('.js-mailto-btn').forEach(el => { el.href = 'mailto:' + mail; });
 
-  function moverIndicador(elementoActivo) {
-    if (!elementoActivo || !navIndicator) return;
-    navIndicator.style.width = `${elementoActivo.offsetWidth}px`;
-    navIndicator.style.left = `${elementoActivo.offsetLeft}px`;
-  }
-
-  function updateHeaderSubtitle(sectionId) {
-    if (!headerSubtitle) return;
-    if (sectionId === 'home') {
-      header.classList.remove('has-subtitle');
-      headerSubtitle.innerText = '';
-    } else {
-      header.classList.add('has-subtitle');
-      headerSubtitle.innerText = subtitleTexts[sectionId] || '';
-    }
+  // ============================
+  // 5. SPA NAVIGATION
+  // ============================
+  function moverIndicador(el) {
+    if (!el || !navIndicator) return;
+    navIndicator.style.width = el.offsetWidth + 'px';
+    navIndicator.style.left  = el.offsetLeft  + 'px';
   }
 
   function switchSection(nextId) {
     if (isAnimating || !sectionById[nextId]) return;
     isAnimating = true;
 
-    sections.forEach(s => s.classList.remove('active', 'prev', 'next'));
-    
-    sectionOrder.forEach((id, i) => {
-      const sec = sectionById[id];
-      if (id === nextId) {
-        sec.classList.add('active');
-      } else {
-        sec.classList.add(i < sectionOrder.indexOf(nextId) ? 'prev' : 'next');
-      }
-    });
+    sections.forEach(s => s.classList.remove('active'));
+    sectionById[nextId].classList.add('active');
 
     allSpaLinks.forEach(link => {
-      const linkTarget = link.dataset.section || link.getAttribute('href').replace('#', '');
-      const isActive = linkTarget === nextId;
-      link.classList.toggle('active', isActive);
-      if (isActive && link.closest('nav')) moverIndicador(link);
+      const target = link.dataset.section || link.getAttribute('href').replace('#','');
+      const active = target === nextId;
+      link.classList.toggle('active', active);
+      if (active && link.closest('nav')) moverIndicador(link);
     });
 
-    updateHeaderSubtitle(nextId);
     currentId = nextId;
-    
-    setTimeout(() => { isAnimating = false; }, 600);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => { isAnimating = false; }, 600);
   }
 
   allSpaLinks.forEach(link => {
     link.addEventListener('click', e => {
+      const href   = link.getAttribute('href') || '';
+      const target = link.dataset.section || href.replace('#','');
+      if (!target || target === '#' || !sectionById[target]) return;
+      if (href.startsWith('mailto') || href.startsWith('http') || href.startsWith('https')) return;
       e.preventDefault();
-      const target = link.dataset.section || link.getAttribute('href').replace('#', '');
       history.pushState({ section: target }, '', `#${target}`);
       switchSection(target);
     });
   });
 
   window.addEventListener('popstate', e => {
-    switchSection(e.state?.section || 'home');
+    const target = e.state?.section || location.hash.replace('#','') || 'home';
+    switchSection(target);
   });
 
   // ============================
-  // 4. SISTEMA DE TRADUCCIONES
+  // 6. CARRUSEL DE PRINCIPIOS
+  // IntersectionObserver pausa cuando sale del viewport
   // ============================
-
-  function applyTranslations() {
-    $$('[data-i18n]').forEach(el => {
-      const key = el.dataset.i18n;
-      if (translations[currentLang]?.[key]) el.innerHTML = translations[currentLang][key];
-    });
-    $$('[data-i18n-placeholder]').forEach(el => {
-      const key = el.dataset.i18nPlaceholder;
-      if (translations[currentLang]?.[key]) el.placeholder = translations[currentLang][key];
-    });
-  }
-
-  fetch('i18n.json')
-    .then(res => res.json())
-    .then(data => {
-      translations = data;
-      
-      navIndicator.style.transition = 'none'; // Sin animación al arrancar
-      applyTranslations();
-      
-      const activo = $('nav ul li a.active');
-      if (activo) moverIndicador(activo);
-
-      void navIndicator.offsetWidth;
-      navIndicator.style.transition = '';
-    })
-    .catch(err => console.error("Error cargando traducciones:", err));
-
-
-  $$('.flag-btn').forEach(btn => btn.addEventListener('click', () => {
-    currentLang = btn.dataset.lang;
-    localStorage.setItem('lang', currentLang);
-
-    // 1. Matamos la animación temporalmente para que el cambio sea invisible
-    navIndicator.style.transition = 'none';
-
-    // 2. Cambiamos los textos
-    applyTranslations();
-
-    // 3. Forzamos a que la línea tome el nuevo ancho del link activo
-    const activo = $('nav ul li a.active');
-    if (activo) {
-        moverIndicador(activo);
-    }
-
-    // 4. Forzamos al navegador a procesar el cambio y devolvemos la animación 
-    // para cuando el usuario haga clicks normales en el menú
-    void navIndicator.offsetWidth; // Truco técnico para "resetear" el renderizado
-    navIndicator.style.transition = ''; 
-  }));
-
-
-
-  // ============================
-  // 5. CARRUSEL DE RESEÑAS (FIXED)
-  // ============================
-
   const carouselWrapper = $('#resenasCarousel');
   if (carouselWrapper) {
     const cards = Array.from(carouselWrapper.children);
     const track = document.createElement('div');
-    
-    // Estilos forzados por JS para que no se rompa el diseño
-    track.style.display = 'flex';
-    track.style.gap = '20px';
-    track.style.width = 'max-content';
-    track.style.cursor = 'grab';
-    
-    // Clonamos las tarjetas para el efecto infinito
-    cards.forEach(c => track.appendChild(c.cloneNode(true)));
-    cards.forEach(c => track.appendChild(c.cloneNode(true)));
-    
+    track.classList.add('carousel-track');
+    track.style.cssText = 'display:flex;gap:20px;width:max-content;cursor:grab;';
+
+    const cloneSet = list => list.forEach(c => track.appendChild(c.cloneNode(true)));
+    cloneSet(cards);
+    cloneSet(cards);
+
     carouselWrapper.style.overflow = 'hidden';
     carouselWrapper.innerHTML = '';
     carouselWrapper.appendChild(track);
 
-    let posX = 0, speed = 0.7, isDragging = false, startX = 0, scrollStart = 0;
+    let posX = 0, speed = 0.6, isDragging = false;
+    let startX = 0, scrollStart = 0;
+    let isVisible = true;
+    let isDragHorizontal = null, dragStartY = 0;
 
-    function animateCarousel() {
-      if (!isDragging) {
+    const observer = new IntersectionObserver(entries => {
+      isVisible = entries[0].isIntersecting;
+    }, { threshold: 0.1 });
+    observer.observe(carouselWrapper);
+
+    (function animateCarousel() {
+      if (isVisible && !isDragging) {
         posX -= speed;
-        // Si llegamos a la mitad, reseteamos a 0 para el loop infinito
         if (-posX >= track.scrollWidth / 2) posX = 0;
         track.style.transform = `translateX(${posX}px)`;
       }
       requestAnimationFrame(animateCarousel);
-    }
-    animateCarousel();
+    })();
 
     track.addEventListener('pointerdown', e => {
       isDragging = true;
+      isDragHorizontal = null;
       startX = e.clientX;
+      dragStartY = e.clientY;
       scrollStart = posX;
       track.setPointerCapture(e.pointerId);
       track.style.cursor = 'grabbing';
     });
-    
+
     track.addEventListener('pointermove', e => {
       if (!isDragging) return;
-      const delta = e.clientX - startX;
-      posX = scrollStart + delta;
-      
-      // Control de bordes para el drag infinito
-      if (-posX >= track.scrollWidth / 2) posX += track.scrollWidth / 2;
-      if (posX > 0) posX -= track.scrollWidth / 2;
-      
+      const dx = e.clientX - startX;
+      const dy = e.clientY - dragStartY;
+      if (isDragHorizontal === null) isDragHorizontal = Math.abs(dx) > Math.abs(dy);
+      if (!isDragHorizontal) return;
+      e.preventDefault();
+      posX = scrollStart + dx;
+      const half = track.scrollWidth / 2;
+      if (-posX >= half) posX += half;
+      if (posX > 0)      posX -= half;
       track.style.transform = `translateX(${posX}px)`;
-    });
+    }, { passive: false });
 
-    const stopDragging = () => { 
-      isDragging = false; 
-      track.style.cursor = 'grab'; 
-    };
-    track.addEventListener('pointerup', stopDragging);
-    track.addEventListener('pointerleave', stopDragging);
+    const stopDrag = () => { isDragging = false; isDragHorizontal = null; track.style.cursor = 'grab'; };
+    track.addEventListener('pointerup', stopDrag);
+    track.addEventListener('pointerleave', stopDrag);
   }
 
   // ============================
-  // 6. LIGHTBOX: GALERÍA DE SURF
+  // 7. MODAL SERVICIOS
   // ============================
+  const modal       = $('#servicio-detalle');
+  const modalTitulo = $('#servicio-titulo');
+  const modalBody   = $('#servicio-body');
 
-  const lb = $('#lightbox'), lbImg = $('#lightbox-img'), surfImgs = $$('.surf-card img');
-  let lbIdx = 0, tStartX = 0;
+  function openServicioModal(key) {
+    const data = serviciosData[key];
+    if (!data || !modal) return;
 
-  function moveLb(dir) {
-    const outX = dir === 'next' ? '-100%' : '100%';
-    const inX = dir === 'next' ? '100%' : '-100%';
+    modalTitulo.textContent = data.titulo;
+    modalBody.innerHTML = '<ul>' + data.items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+    modalBody.classList.add('active');
 
-    lbImg.style.transition = 'transform 0.25s ease, opacity 0.2s';
-    lbImg.style.transform = `translateX(${outX})`;
-    lbImg.style.opacity = '0';
-
-    setTimeout(() => {
-      lbIdx = dir === 'next' ? (lbIdx + 1) % surfImgs.length : (lbIdx - 1 + surfImgs.length) % surfImgs.length;
-      lbImg.src = surfImgs[lbIdx].src;
-      lbImg.style.transition = 'none';
-      lbImg.style.transform = `translateX(${inX})`;
-      
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          lbImg.style.transition = 'transform 0.4s cubic-bezier(0.17, 0.84, 0.44, 1), opacity 0.3s ease';
-          lbImg.style.transform = 'translateX(0)';
-          lbImg.style.opacity = '1';
-        }, 10);
-      });
-    }, 200); 
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('active');
+    header.classList.add('header-hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => { $('#volver-btn')?.focus(); }, 100);
   }
 
-  const closeLb = () => {
-    lb.classList.remove('active');
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
     header.classList.remove('header-hidden');
     document.body.style.overflow = '';
-    setTimeout(() => { if(lbImg) lbImg.src = ""; }, 300);
-  };
+  }
 
-  surfImgs.forEach((img, idx) => img.addEventListener('click', () => {
-    lbIdx = idx;
-    lbImg.src = img.src;
-    lb.classList.add('active');
-    header.classList.add('header-hidden'); 
-    document.body.style.overflow = 'hidden'; 
-    lbImg.style.transform = 'scale(1) translateX(0)';
-    lbImg.style.opacity = '1';
-  }));
-
-  $('#next-img')?.addEventListener('click', e => { e.stopPropagation(); moveLb('next'); });
-  $('#prev-img')?.addEventListener('click', e => { e.stopPropagation(); moveLb('prev'); });
-  $('.close-lightbox')?.addEventListener('click', closeLb);
-  lb?.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
-
-  // Gestos táctiles para el lightbox
-  lb?.addEventListener('touchstart', e => tStartX = e.changedTouches[0].screenX, {passive: true});
-  lb?.addEventListener('touchend', e => {
-    const d = tStartX - e.changedTouches[0].screenX;
-    if (Math.abs(d) > 60) moveLb(d > 0 ? 'next' : 'prev');
-  }, {passive: true});
-
-  // ============================
-  // 7. MODAL DESTINOS: LOGICA Y ANIMACIÓN
-  // ============================
-
-  fetch('destinos.json')
-    .then(res => res.json())
-    .then(data => {
-      destinosData = data;
-      const modal = $('#destino-detalle'), detalleInner = $('.detalle-inner');
-      const tabButtons = $$('.tab-btn'), tabContents = $$('.tab-content');
-
-      function updateModalContent(destinoInfo) {
-        tabContents.forEach(tc => { tc.classList.remove('active'); tc.style.opacity = "0"; });
-        tabButtons.forEach(tb => tb.classList.remove('active'));
-
-        ['hospedaje', 'tours', 'transfers'].forEach((tabId, i) => {
-          const el = document.getElementById(tabId);
-          if (el && destinoInfo[tabId]) {
-            el.innerHTML = destinoInfo[tabId][currentLang] || '';
-            if (i === 0) {
-              tabButtons[0].classList.add('active');
-              el.classList.add('active');
-              setTimeout(() => el.style.opacity = "1", 50);
-            }
-          }
-        });
-      }
-
-      tabButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          const targetId = btn.dataset.tab;
-          const newContent = document.getElementById(targetId);
-          if (!newContent || newContent.classList.contains("active")) return;
-          
-          const oldHeight = detalleInner.offsetHeight;
-          tabButtons.forEach(b => b.classList.remove("active"));
-          tabContents.forEach(c => { c.classList.remove('active'); c.style.opacity = "0"; });
-          
-          btn.classList.add("active");
-          newContent.classList.add("active");
-          
-          const newHeight = detalleInner.scrollHeight;
-          detalleInner.style.height = oldHeight + 'px';
-          detalleInner.offsetHeight; 
-          detalleInner.style.height = newHeight + 'px';
-          
-          setTimeout(() => {
-            newContent.style.opacity = "1";
-            setTimeout(() => { detalleInner.style.height = 'auto'; }, 400);
-          }, 50);
-        });
-      });
-
-      $$('.tour-card .btn-unificado').forEach(btn => {
-        btn.addEventListener('click', e => {
-          e.preventDefault();
-          e.stopPropagation();
-          const dName = btn.closest('.tour-card').dataset.destino;
-          if (destinosData[dName]) {
-            $('#detalle-titulo').innerText = dName;
-            updateModalContent(destinosData[dName]);
-            modal.style.display = 'flex';
-            header.classList.add('header-hidden');
-            document.body.style.overflow = 'hidden';
-            requestAnimationFrame(() => modal.classList.add('active'));
-          }
-        });
-      });
-
-      const closeDestino = () => {
-        modal.classList.remove('active');
-        header.classList.remove('header-hidden');
-        document.body.style.overflow = '';
-        setTimeout(() => { if(!modal.classList.contains('active')) modal.style.display = 'none'; }, 400);
-      };
-
-      $('#volver-btn')?.addEventListener('click', closeDestino);
-      modal.addEventListener('click', e => { if (e.target === modal) closeDestino(); });
-    })
-    .catch(err => console.error("Error cargando destinos:", err));
-
-  // ============================
-  // 8. ACCORDION Y FORMULARIOS
-  // ============================
-
-  $$('.destino').forEach(dest => {
-    const content = dest.querySelector('.contenido');
-    if (!content) return;
-    dest.addEventListener('click', () => {
-      const isOpen = content.offsetHeight > 0;
-      $$('.destino .contenido').forEach(c => { c.style.height = '0px'; c.style.opacity = '0'; });
-      if (!isOpen) {
-        content.style.height = content.scrollHeight + 'px';
-        content.style.opacity = '1';
-      }
+  $$('.servicio-card .btn-unificado').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const key = btn.closest('.servicio-card').dataset.servicio;
+      openServicioModal(key);
     });
   });
 
-  if (window.emailjs) {
-    emailjs.init('Cq9PacH-N_N_hZ344');
-    $('.formulario-contacto')?.addEventListener('submit', function(e) {
-      e.preventDefault();
-      emailjs.sendForm('service_v95fe07', 'template_nrxcwun', this)
-        .then(() => { alert('Mensaje enviado 😊'); this.reset(); })
-        .catch(err => alert('Error al enviar ❌'));
-    });
-  }
+  $('#volver-btn')?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  modal?.addEventListener('keydown', e => { if (e.key === 'Tab') trapFocus(modal, e); });
 
   // ============================
-  // FIX: LÓGICA QR INTERACTIVO WPP
+  // 8. GLOBAL KEYDOWN
   // ============================
-  
-  // Usamos tus atajos utilitarios '$'
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) closeModal();
+  });
+
+  // ============================
+  // 9. QR TOGGLE
+  // ============================
   const qrContainer = $('.qr-prolijo');
-  const qrImage = $('.qr-prolijo img');
-
+  const qrImage     = qrContainer?.querySelector('img');
   if (qrContainer && qrImage) {
-    // Escuchamos el click (o tap en móviles) directamente en la imagen
-    qrImage.addEventListener('click', (e) => {
-      // Evitamos que el click se propague a otros elementos
-      e.stopPropagation(); 
-      
-      // 'toggle' hace la magia: si no tiene la clase, se la pone (agranda); 
-      // si ya la tiene, se la saca (achica).
+    qrImage.addEventListener('click', e => {
+      e.stopPropagation();
       qrContainer.classList.toggle('qr-active');
     });
+    document.addEventListener('click', () => qrContainer.classList.remove('qr-active'));
+  }
 
-    // OPCIONAL: Si tocan en cualquier otro lado de la pantalla, 
-    // achicamos el QR por las dudas.
-    document.addEventListener('click', () => {
-      qrContainer.classList.remove('qr-active');
+  // ============================
+  // 10. CONTACT FORM
+  // ============================
+  $('.formulario-final-v3')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const honey = this.querySelector('input[name="_honey"]');
+    if (honey && honey.value) return;
+
+    const btn = this.querySelector('button[type="submit"]');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<span>ENVIANDO...</span>';
+    btn.disabled = true;
+
+    emailjs.sendForm('service_v95fe07', 'template_nrxcwun', this)
+      .then(() => {
+        btn.innerHTML = '<span>✓ ENVIADO</span>';
+        this.reset();
+        setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 3000);
+      })
+      .catch(err => {
+        console.error('EmailJS error:', err);
+        btn.innerHTML = '<span>ERROR — INTENTÁ DE NUEVO</span>';
+        setTimeout(() => { btn.innerHTML = original; btn.disabled = false; }, 3000);
+      });
+  });
+
+  // ============================
+  // 11. SLIDER ENGINE
+  // Debounced resize, ARIA dots
+  // ============================
+  function inicializarSliders() {
+    $$('.slider-wrapper').forEach(slider => {
+      const track       = slider.querySelector('.slider-track');
+      const slides      = slider.querySelectorAll('.slide');
+      const dotContainer = slider.querySelector('.slider-dots');
+
+      if (!track || !slides.length || !dotContainer) return;
+
+      let idx = 0;
+      let intervalo;
+      const TIEMPO = 3800;
+
+      function actualizarPosicion() {
+        track.style.transform = `translateX(-${idx * 100}%)`;
+        slider.querySelectorAll('.dot').forEach((d, i) => {
+          const active = i === idx;
+          d.classList.toggle('active', active);
+          d.setAttribute('aria-selected', String(active));
+        });
+      }
+
+      dotContainer.innerHTML = '';
+      slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', `Slide ${i + 1} de ${slides.length}`);
+        dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        dot.setAttribute('tabindex', '0');
+        if (i === 0) dot.classList.add('active');
+        const go = () => { idx = i; actualizarPosicion(); restart(); };
+        dot.addEventListener('click', go);
+        dot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') go(); });
+        dotContainer.appendChild(dot);
+      });
+
+      const start   = () => { clearInterval(intervalo); intervalo = setInterval(() => { idx = (idx + 1) % slides.length; actualizarPosicion(); }, TIEMPO); };
+      const stop    = () => clearInterval(intervalo);
+      const restart = () => { stop(); start(); };
+
+      // Touch swipe
+      let touchX = 0;
+      slider.addEventListener('touchstart', e => { stop(); touchX = e.changedTouches[0].screenX; }, { passive: true });
+      slider.addEventListener('touchend', e => {
+        const d = touchX - e.changedTouches[0].screenX;
+        if (Math.abs(d) > 50) {
+          if (d > 0 && idx < slides.length - 1) idx++;
+          else if (d < 0 && idx > 0) idx--;
+        }
+        actualizarPosicion();
+        start();
+      }, { passive: true });
+
+      // Debounced resize
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(actualizarPosicion, 100);
+      });
+
+      start();
     });
   }
 
-
   // ============================
-  // 9. INICIALIZACIÓN FINAL
+  // 12. INIT
   // ============================
-  
-  // Lazy Load mejorado
-  const lazyObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        if(img.dataset.src) {
-            img.src = img.dataset.src;
-            img.classList.add('loaded');
-            lazyObserver.unobserve(img);
-        }
-      }
-    });
-  });
-  $$('img.lazy').forEach(img => lazyObserver.observe(img));
-
-  // Primer arranque
   switchSection(currentId);
   setTimeout(() => {
     const active = $(`nav ul li a[href="#${currentId}"]`);
-    if(active) moverIndicador(active);
-  }, 500);
+    if (active) moverIndicador(active);
+  }, 400);
 
-});
+  inicializarSliders();
 
-
-/* ============================
-   10. MOTOR DE SLIDERS (UNIFICADO & TOUCH)
-   ============================ */
-function inicializarSliders() {
-    const todosLosSliders = document.querySelectorAll('.slider-wrapper, .slider-mini');
-    
-    todosLosSliders.forEach(slider => {
-        const track = slider.querySelector('.slider-track');
-        const slides = slider.querySelectorAll('.slide, .slide-content');
-        const dotContainer = slider.querySelector('.slider-dots, .dots-internos');
-        
-        if (!track || !slides.length || !dotContainer) return;
-
-        let indiceActual = 0;
-        let intervalo;
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const tiempo = slider.classList.contains('slider-mini') ? 5000 : 3500;
-
-        function actualizarPosicion() {
-            // Usamos porcentaje puro para evitar errores de redondeo en iPad
-            track.style.transform = `translateX(-${indiceActual * 100}%)`;
-            
-            const todosLosDots = slider.querySelectorAll('.dot, .dot-mini');
-            todosLosDots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === indiceActual);
-            });
-        }
-
-        // --- LÓGICA DE TOQUE (MANUAL) ---
-        slider.addEventListener('touchstart', e => {
-            detener();
-            touchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
-
-        slider.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            const diff = touchStartX - touchEndX;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0 && indiceActual < slides.length - 1) indiceActual++;
-                else if (diff < 0 && indiceActual > 0) indiceActual--;
-            }
-            actualizarPosicion();
-            iniciar();
-        }, {passive: true});
-
-        // --- DOTS Y AUTOPLAY ---
-        dotContainer.innerHTML = '';
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.classList.add(slider.classList.contains('slider-mini') ? 'dot-mini' : 'dot');
-            if (i === 0) dot.classList.add('active');
-            dot.onclick = () => {
-                indiceActual = i;
-                actualizarPosicion();
-                reiniciarAutoplay();
-            };
-            dotContainer.appendChild(dot);
-        });
-
-        const iniciar = () => { clearInterval(intervalo); intervalo = setInterval(() => {
-            indiceActual = (indiceActual + 1) % slides.length;
-            actualizarPosicion();
-        }, tiempo); };
-        const detener = () => clearInterval(intervalo);
-        const reiniciarAutoplay = () => { detener(); iniciar(); };
-
-        window.addEventListener('resize', actualizarPosicion);
-        iniciar();
-    });
-}
-
-function actualizarSubrayado() {
-    // Buscamos cuál es el link que está activo en este momento
-    const linkActivo = document.querySelector('nav ul li a.active'); // Fijate si usás la clase '.active' u otra
-    const indicador = document.querySelector('.nav-indicator');
-
-    if (linkActivo && indicador) {
-        // Le damos el nuevo ancho y la nueva posición
-        indicador.style.width = linkActivo.offsetWidth + 'px';
-        indicador.style.left = linkActivo.offsetLeft + 'px';
-    }
-}
-
-// Hace un pequeño "baile" al cargar para mostrar que hay más menú
-const navList = $('nav ul');
-if(navList && window.innerWidth < 768) {
+  // Mobile nav scroll hint
+  const navList = $('nav ul');
+  if (navList && window.innerWidth < 768) {
     setTimeout(() => {
-        navList.scrollTo({ left: 30, behavior: 'smooth' });
-        setTimeout(() => navList.scrollTo({ left: 0, behavior: 'smooth' }), 500);
+      navList.scrollTo({ left: 30, behavior: 'smooth' });
+      setTimeout(() => navList.scrollTo({ left: 0, behavior: 'smooth' }), 500);
     }, 1000);
-}
+  }
 
-
-
-// Arranca cuando el DOM está listo
-document.addEventListener('DOMContentLoaded', inicializarSliders);
+}); // end DOMContentLoaded
