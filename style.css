@@ -51,8 +51,8 @@ nav ul li a.active,nav ul li a:hover{opacity:1}
 /* inner wrapper for padded sections */
 .section-inner{padding:50px 5% 70px;max-width:1280px;margin:0 auto}
 /* servicios gets its own full-width inner so the grid goes edge to edge */
-#servicios .section-inner{padding-left:0;padding-right:0;max-width:100%}
-#servicios .section-title{padding-left:5%;padding-right:5%}
+#servicios .section-inner{padding-left:0;padding-right:0;padding-bottom:60px;max-width:100%}
+#servicios .section-title{padding-left:5%;padding-right:5%;margin-bottom:48px}
 
 /* shared title */
 .section-title{
@@ -136,7 +136,7 @@ nav ul li a.active,nav ul li a:hover{opacity:1}
   display:grid;
   grid-template-columns:1.4fr 1fr;
   grid-template-rows:repeat(3,1fr);
-  gap:4px;
+  gap:10px;
   width:100%;
   height:calc(100vh - var(--hh) - 130px);
   min-height:580px;
