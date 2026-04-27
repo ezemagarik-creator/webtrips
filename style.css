@@ -2,8 +2,8 @@
    1. VARIABLES & RESET
    ========================================================================== */
 :root {
-  --bg-main: #fcfcf9;      /* Ivory / Blanco hueso */
-  --text-primary: #1a1a1a;  /* Gris carbón casi negro */
+  --bg-main: #fcfcf9;
+  --text-primary: #1a1a1a;
   --accent-gray: #777;
   --divider: rgba(0,0,0,0.08);
   --white: #ffffff;
@@ -16,53 +16,42 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 html {
-  height: -webkit-fill-available; /* Ajuste para navegadores móviles */
+  /* FIX: removido overflow-y: visible !important que rompía scroll en Safari */
   scroll-behavior: smooth;
-  overflow-y: visible !important; /* Permitimos que el contenido fluya */
-  background-color: var(--bg-main) !important;
+  background-color: var(--bg-main);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: 'Montserrat', sans-serif;
 }
 
-
 body {
-  background-color: var(--bg-main) !important;
+  background-color: var(--bg-main);
   margin: 0;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  overflow-y: auto; /* El body es el único que manda en el scroll */
-  -webkit-overflow-scrolling: touch; /* Scroll fluido en iOS */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-
-
-/* Aseguramos que el main crezca y ocupe el espacio */
 main {
-  flex: 1; /* Esto hace que empuje el footer hacia abajo */
+  flex: 1;
   width: 100%;
   display: block;
   min-height: 100vh;
-  background-color: var(--bg-main) !important;
+  background-color: var(--bg-main);
 }
 
-/* Agregamos la clase que faltaba para esconder el header */
 .header-hidden {
   transform: translateY(-100%);
   opacity: 0;
   pointer-events: none;
   transition: all 0.4s var(--bezier);
-}
-
-
-#content-wrapper {
-flex: 1 0 auto;
-position: relative;
-width: 100%;
 }
 
 img {
@@ -71,13 +60,41 @@ img {
   display: block;
 }
 
+/* FIX: honeypot field completamente oculto para usuarios reales */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 /* ==========================================================================
-   2. HEADER (Fixed & Blur)
+   2. FOCUS STYLES — FIX: visibilidad de foco para teclado
+   ========================================================================== */
+:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+}
+
+.btn-minimal:focus-visible,
+.btn-unificado:focus-visible,
+.s-btn:focus-visible,
+.btn-mail:focus-visible,
+.btn-negro-final-v3:focus-visible,
+.flag-btn:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   3. HEADER (Fixed & Blur)
    ========================================================================== */
 header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+  gap: 40px;
   padding: 0 5%;
   background: rgba(252, 252, 249, 0.85);
   backdrop-filter: blur(12px);
@@ -88,13 +105,14 @@ header {
   height: 80px;
   z-index: 9999;
   transition: all 0.4s var(--bezier);
+  -webkit-transform: translateZ(0);
 }
-
 
 nav ul {
   list-style: none;
   display: flex;
   gap: 25px;
+  position: relative;
 }
 
 nav ul li a {
@@ -108,25 +126,21 @@ nav ul li a {
   padding: 5px 0;
 }
 
-nav ul {
-  position: relative; /* Clave para que la línea se mueva dentro de este contenedor */
-}
-
 .nav-indicator {
   position: absolute;
   bottom: -5px;
   left: 0;
   height: 2px;
   background-color: var(--text-primary);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Transición súper suave */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
 .lang-switch {
-	display: flex;
-	align-items: center;
-	gap: 5px;
-	flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
 }
 
 .lang-switch .flag-btn {
@@ -138,24 +152,23 @@ nav ul {
 }
 
 /* ==========================================================================
-   3. SPA SECTIONS (Transitions)
+   4. SPA SECTIONS (Transitions)
    ========================================================================== */
 .section {
   display: none;
-  width: 100%; 
+  width: 100%;
   padding-top: 100px;
   padding-bottom: 40px;
   background: var(--bg-main);
 }
 
-/* Títulos de sección elegantes */
 .section h2[data-i18n] {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 2.5rem;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 6px; /* Espaciado moderno */
+  letter-spacing: 6px;
   margin: 40px auto 60px auto;
   position: relative;
   padding-bottom: 20px;
@@ -163,14 +176,13 @@ nav ul {
   color: var(--text-primary);
 }
 
-/* Línea minimalista decorativa debajo del título */
 .section h2[data-i18n]::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 40px; /* Línea corta y elegante */
+  width: 40px;
   height: 2px;
   background-color: var(--text-primary);
 }
@@ -178,55 +190,42 @@ nav ul {
 .section.active {
   height: auto;
   display: block;
-  animation: fadeInSection 0.5s var(--bezier) forwards; /* Agregamos la animación */
-  position: relative; 
+  animation: fadeInSection 0.5s var(--bezier) forwards;
+  position: relative;
   z-index: 2;
-opacity:1 !important;
-transition: all 0.4s var(--bezier);
-visibility: visible !important;
+  opacity: 1;
+  transition: all 0.4s var(--bezier);
+  visibility: visible;
   min-height: calc(100vh - 80px);
 }
-@keyframes fadeInSection {
-  from {
-    opacity: 0;
-    transform: translateY(10px); /* Cambiá X por Y para que sea sutil hacia arriba */
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
+@keyframes fadeInSection {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* ==========================================================================
-   4. HOME - FIX FINAL
+   5. HOME
    ========================================================================== */
-
 #home {
-  padding: 140px 5% 40px 5% !important;
+  padding: 140px 5% 40px 5%;
   max-width: 1300px;
   margin: 0 auto;
-  overflow: hidden; /* Limpia el float */
+  overflow: hidden;
 }
 
-/* EL CONTENEDOR: Solo Grid, nada de Flex ni Float */
 .hero-fijo-horizontal {
-  display: grid !important;
-  grid-template-columns: 1fr 1.2fr !important; /* Dos columnas iguales */
-  gap: 40px !important;
-  align-items: center !important;
-  margin-bottom: 40px !important; /* Reducimos de 80px a 40px */
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 40px;
   padding-bottom: 35px;
-  border-bottom: 1px solid var(--divider); /* La línea sutil */
+  border-bottom: 1px solid var(--divider);
 }
 
-.hero-texto-izq {
-  grid-column: 1 / 2 !important;
-}
-
-.hero-imagen-der {
-  grid-column: 2 / 3 !important;
-}
+.hero-texto-izq { grid-column: 1 / 2; }
+.hero-imagen-der { grid-column: 2 / 3; }
 
 .hero-texto-izq h1 {
   font-family: 'Montserrat', sans-serif;
@@ -237,108 +236,101 @@ visibility: visible !important;
 }
 
 .hero-imagen-der img {
-  width: 100% !important;
-  height: 480px !important;
-  object-fit: cover !important;
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
   border-radius: 12px;
-display: 	block !important;
+  display: block;
 }
 
 .hero-subtitle {
-	margin-bottom: 45px !important;
-	line-height: 1.6;
-	max-width: 450px;
-	color: #444;
+  margin-bottom: 45px;
+  line-height: 1.6;
+  max-width: 450px;
+  color: #444;
 }
 
-/* Limpiamos el float para que lo de abajo no se suba */
 .home-wrapper {
-  clear: both !important;
+  clear: both;
   padding-top: 40px;
 }
 
-.banner-separador-full img {
-  width: 100%;
-  height: 450px;
-  object-fit: cover;
-  border-radius: 15px;
-  margin-bottom: 50px;
-}
-
 .grilla-tips-tres {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important; /* Fuerza 3 columnas del mismo ancho */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   margin-top: 30px;
-  width:100%;
-  max-width:1200px;
+  width: 100%;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
 
 @media (max-width: 480px) {
-   .grilla-tips-tres {
-    grid-template-columns: 1fr !important;
+  .grilla-tips-tres {
+    grid-template-columns: 1fr;
+  }
 }
-}
-
 
 .tarjeta-tip.slider-mini {
-  padding-bottom: 30px !important;
-  padding:0 !important;
   position: relative;
-  width: 100% !important;
+  width: 100%;
   background: #fff;
   border: 1px solid #eee;
   border-radius: 12px;
   min-height: 220px;
-  overflow: hidden !important;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .slider-mini, .slider-mini * {
-    box-sizing: border-box !important;
+  box-sizing: border-box;
 }
 
 .slider-mini {
-    overflow: hidden !important;
-    width: 100% !important;
-    position: relative !important;
-    touch-action: pan-y;
-    display: block !important;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  touch-action: pan-y;
+  display: block;
 }
 
 .slider-track {
-    display: flex !important;
-    width: 100% !important;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
-    cursor: grab;
-    gap: 0 !important;
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  gap: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .slide {
-    flex: 0 0 100% !important; /* Prohibido achicarse */
-    width: 100% !important;
-    min-width: 100% !important;
-    padding: 0 20px; /* El aire que querés entre el borde y el texto */
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  scroll-snap-align: center;
+  padding: 0 20px;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
-
-
 
 .slide-content {
-  flex: 0 0 100% !important;
+  flex: 0 0 100%;
   scroll-snap-align: center;
-  padding: 20px 25px 40px 25px !important;
+  padding: 20px 25px 40px 25px;
   box-sizing: border-box;
-  width: 100% !important;
-  margin-right: 0 !important;
+  width: 100%;
   background: #fff;
-  outline: 1px solid transparent;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-/* Puntitos dentro del cuadro */
 .dots-internos {
   position: absolute;
   bottom: 15px;
@@ -350,7 +342,7 @@ display: 	block !important;
 }
 
 .dot-mini {
-  width: 6px; /* Puntitos más pequeños */
+  width: 6px;
   height: 6px;
   background: #ddd;
   border-radius: 50%;
@@ -363,174 +355,104 @@ display: 	block !important;
   transform: scale(1.2);
 }
 
-
-
 .tarjeta-tip {
   background: #fff;
-  padding: 30px;
   border: 1px solid #eee;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 200px; /* Esto evita que se aplasten */
+  min-height: 200px;
 }
-
 
 @media (max-width: 900px) {
   .hero-fijo-horizontal {
-    grid-template-columns: 1fr !important; /* Una sola columna */
-    gap: 30px !important;
-    text-align: center !important;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
   }
-  .hero-texto-izq { 
-    text-align: center !important;
+  .hero-texto-izq {
+    text-align: center;
   }
-  /* Centramos el botón que en la captura te quedó a la izquierda */
   .hero-texto-izq .btn-minimal {
     margin-top: 10px;
     display: inline-block;
   }
   .hero-imagen-der img {
-    height: 350px !important; /* Achicamos la imagen para que no te coma toda la pantalla */
+    height: 350px;
     margin-top: 20px;
   }
 }
 
-/* --- CONFIGURACIÓN GENERAL DEL SLIDER --- */
-
-/* Antiflicker para todos los sliders */
-.slider-track, 
-.slide, 
-.slider-wrapper img, 
+/* Antiflicker */
+.slider-wrapper,
+.slider-wrapper img,
 .slide-content {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    -webkit-perspective: 1000;
-    perspective: 1000;
-    background-color: transparent !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 
-/* Evita el flash blanco en el contenedor */
 .slider-wrapper, .tarjeta-tip.slider-mini {
-    background-color: var(--bg-main) !important; 
+  background-color: var(--bg-main);
+  overflow: hidden;
 }
-
 
 .slider-wrapper {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 15px !important;
-    margin-bottom: 50px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    webkit-mask-image: -webkit-radial-gradient(white, black);
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 15px;
+  margin-bottom: 50px;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
-.slider-wrapper, .tarjeta-tip.slider-mini {
-   overflow: hidden !important;
+.slider-track::-webkit-scrollbar {
+  display: none;
 }
 
-.slider-wrapper, .slider-mini {
-   overflow: hidden !important;
-   position: relative;
-}
-
-
-.slider-track::-webkit-scrollbar { 
-    display: none; 
-}
-
-.slide {
-    flex: 0 0 100%; /* Ocupa el 100% del ancho */
-    scroll-snap-align: center;
-    width: 100%;
-}
-
-.slide .slide-content{
-    flex: 0 0 100% !important; 
-    width: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
-    padding: 30px 25px 45px 25px;
-}
-
-
-/* Ajustes para las fotos del banner */
 .slider-wrapper img.slide {
-    height: 450px !important;
-    object-fit: cover !important;
- 	padding: 0 !important;
-	margin: 0 !important;
-	border-radius: 15px !important;
+  height: 450px;
+  object-fit: cover;
+  padding: 0;
+  margin: 0;
+  border-radius: 15px;
 }
 
-/* Ajustes para los Tips */
-.tips-slider {
-    border-radius: 0; 
-}
-.tips-slider .slide {
-    padding: 10px; /* Evita que la sombra de la tarjeta se corte */
-    box-sizing: border-box;
-}
-
-/* --- ESTILO DE LOS PUNTITOS (DOTS) --- */
 .slider-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    position: absolute;
-    bottom: 15px;
-    left: 0;
-    width: 100%;
-}
-
-.tips-slider .slider-dots {
-    position: relative; /* Para que los puntos queden debajo de las tarjetas */
-    bottom: 0;
-    margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  width: 100%;
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.5); /* Puntos blancos translúcidos para fotos */
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.tips-slider .dot { 
-    background: #ccc; /* Puntos grises para los tips */
-} 
-
-.dot.active { 
-    background: #fff; 
-    transform: scale(1.2); 
+.dot.active {
+  background: #fff;
+  transform: scale(1.2);
 }
 
-.tips-slider .dot.active { 
-    background: #000; /* Punto activo negro para tips */
-}
-
-
-/* Ajuste de fuente para que el texto no quede gigante en vertical */
 @media (max-width: 850px) {
-  .slide-content h3 {
-    font-size: 1.1rem; /* Achicamos un pelín los títulos en pantallas angostas */
-  }
-  .slide-content p {
-    font-size: 0.85rem; /* Achicamos un pelín el texto */
-  }
+  .slide-content h3 { font-size: 1.1rem; }
+  .slide-content p  { font-size: 0.85rem; }
 }
-
-
 
 /* ==========================================================================
-   5. BOTONES (Minimal & Glass Style)
+   6. BOTONES
    ========================================================================== */
 .btn-minimal {
   display: inline-flex;
@@ -553,7 +475,6 @@ display: 	block !important;
   transform: translateY(-2px);
 }
 
-/* Estilo específico para More Info con Blur */
 .btn-unificado {
   display: inline-flex;
   padding: 15px 35px;
@@ -564,13 +485,9 @@ display: 	block !important;
   letter-spacing: 2px;
   cursor: pointer;
   color: var(--white);
-  
-  /* EL EFECTO DE VIDRIO */
-  background: rgba(255, 255, 255, 0.15); /* Fondo blanco muy clarito */
-  backdrop-filter: blur(12px);           /* El desenfoque */
-  -webkit-backdrop-filter: blur(12px);    /* Soporte para Safari */
-  
-  /* Borde sutil que acompaña el estilo */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: all 0.4s var(--bezier);
 }
@@ -579,13 +496,12 @@ display: 	block !important;
   background: rgba(255, 255, 255, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.6);
   transform: translateY(-3px);
-  color: var(--white); /* Mantenemos el texto blanco */
+  color: var(--white);
 }
 
-/* Estilo para el botón de "Contanos tu experiencia" */
 .btn-mail {
   display: flex;
-  margin: 60px auto; /* Lo centra y le da aire */
+  margin: 60px auto;
   padding: 15px 40px;
   border: 1px solid var(--text-primary);
   background: transparent;
@@ -597,7 +513,7 @@ display: 	block !important;
   letter-spacing: 2px;
   transition: all 0.3s var(--bezier);
   cursor: pointer;
-  width: fit-content; 
+  width: fit-content;
   white-space: nowrap;
 }
 
@@ -607,15 +523,8 @@ display: 	block !important;
   transform: translateY(-2px);
 }
 
-/* Contenedor opcional si el botón no se centra solo */
-.resenas-carousel-wrapper + .btn-mail {
-  display: flex;
-  margin: 40px auto;
-}
-
-
 /* ==========================================================================
-   6. DESTINOS (Cards)
+   7. DESTINOS (Cards)
    ========================================================================== */
 .cards-container {
   display: grid;
@@ -651,7 +560,7 @@ display: 	block !important;
   justify-content: center;
   align-items: center;
   color: var(--white);
-  padding:20px;
+  padding: 20px;
   opacity: 1;
 }
 
@@ -664,25 +573,22 @@ display: 	block !important;
 }
 
 /* ==========================================================================
-   7. RESEÑAS & GALERÍA
+   8. RESEÑAS & GALERÍA
    ========================================================================== */
 .resenas-carousel-wrapper {
-    width: 100vw; /* Ocupa todo el ancho de la pantalla */
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    
-    padding: 40px 0; /* Espacio arriba y abajo */
-    overflow-x: auto; /* Permite el scroll horizontal */
-    display: flex;
-    scrollbar-width: none; /* Esconde la barra en Firefox */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding: 40px 0;
+  overflow-x: auto;
+  display: flex;
+  scrollbar-width: none;
 }
 
-.resenas-carousel-wrapper::-webkit-scrollbar {
-    display: none; /* Esconde la barra en Chrome/Safari/iPad */
-}
+.resenas-carousel-wrapper::-webkit-scrollbar { display: none; }
 
 .resena {
   min-width: 300px;
@@ -693,7 +599,6 @@ display: 	block !important;
   color: #444;
   line-height: 1.8;
 }
-
 
 .surftrips-gallery {
   display: grid;
@@ -712,363 +617,259 @@ display: 	block !important;
 .surf-card img:hover { filter: brightness(0.8); }
 
 /* ==========================================================================
-   8. CONTACTO (V3 - BLINDADO PARA SAFARI/IOS)
+   9. CONTACTO
    ========================================================================== */
-
 .contacto-container-v3 {
-    max-width: 850px;
-    margin: 0 auto;
-    padding: 80px 40px;
-    font-family: 'Montserrat', sans-serif;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 80px 40px;
+  font-family: 'Montserrat', sans-serif;
 }
 
-/* --- ENCABEZADO: Texto + Redes + QR --- */
 .contacto-header-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 60px;
-    gap: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
+  gap: 40px;
 }
 
 .header-left h2 {
-    font-size: 3.2rem;
-    font-weight: 900;
-    letter-spacing: -2px;
-    line-height: 1;
-    margin: 0;
-    color: #000;
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin: 0;
+  color: #000;
 }
 
 .header-left .contacto-sub {
-    max-width: 380px;
-    color: #666;
-    font-size: 0.95rem;
-    line-height: 1.5;
+  max-width: 380px;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
+/* FIX: header-right definido una sola vez, override en breakpoints únicamente */
 .header-right {
-    display: flex;
-    flex-direction: row !important;
-    align-items: stretch; 
-    justify-content: space-between;
-    gap: 12px;
-    height: 110px; /* Altura fija maestra */
-	width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 12px;
+  height: 110px;
+  width: 100%;
 }
 
 .social-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    height: 100%; /* <--- Obligatorio para igualar al QR */
-    flex-grow: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  height: 100%;
+  flex-grow: 1;
 }
 
 .s-btn {
-    width: 100%;
-    height: 100%; /* <--- Esto hace que el botón llene su celda de la grilla */
-    border: 1px solid #000;
-    text-decoration: none;
-    color: #000;
-    font-weight: 700;
-    font-size: 0.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: transparent;
-    padding: 5px; 
-    box-sizing: border-box; /* Evita que el borde sume tamaño extra */
+  width: 100%;
+  height: 100%;
+  border: 1px solid #000;
+  text-decoration: none;
+  color: #000;
+  font-weight: 700;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: transparent;
+  padding: 5px;
+  box-sizing: border-box;
+  transition: background 0.2s, color 0.2s;
 }
 
-
+.s-btn:hover {
+  background: #000;
+  color: #fff;
+}
 
 .s-btn.dark {
-    background: #000;
-    color: #fff;
+  background: #000;
+  color: #fff;
 }
 
-/* Ajuste de altura simétrica en móvil */
-@media (max-width: 800px) {
-    .header-right {
-        display: flex;
-        flex-direction: row !important;
-        align-items: stretch; /* Estira los botones para igualar al QR */
-        gap: 12px;
-        width: 100%;
-        height: 110px; /* Misma altura que definimos para el QR */
-    }
-
-    .social-buttons {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        flex-grow: 1;
-    }
+.s-btn.dark:hover {
+  background: #333;
 }
 
-
-/* ==========================================================================
-   FIX: QR INTERACTIVO (TRANSICIÓN FLUIDA Y CENTRADA)
-   ========================================================================== */
-
+/* QR */
 .qr-prolijo {
-    border: 1px solid #000;
-    width: 110px;
-    height: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centra el contenido en los dos ejes */
-    position: relative;
-    overflow: hidden;
-    cursor: default;
-    box-sizing: border-box;
-    background: #fff; /* Evita transparencias raras al escalar */
-    transition: box-shadow 0.5s cubic-bezier(0.7, 0, .3, 1);
+  border: 1px solid #000;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  box-sizing: border-box;
+  background: #fff;
+  transition: box-shadow 0.5s cubic-bezier(0.7, 0, .3, 1);
 }
 
-/* Imagen base: Desplazada un poquito hacia arriba para dar lugar al texto */
 .qr-prolijo img {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
-    display: block;
-    z-index: 10;
-    transform: translateY(-8px) scale(1); /* Posición inicial */
-    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    will-change: transform;
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  display: block;
+  z-index: 10;
+  transform: translateY(-8px) scale(1);
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  will-change: transform;
 }
 
-/* ==========================================================================
-   QR: TEXTO COMO ÚNICO LINK CLICKABLE
-   ========================================================================== */
-
-
-/* El link de texto */
 .qr-text-link {
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: #000; /* Forzamos el color negro */
-    text-decoration: none; /* Quitamos el subrayado */
-    text-align: center;
-    line-height: 1.1;
-    width: 90%;
-    position: absolute;
-    bottom: 10px;
-    z-index: 15; /* Por encima de la imagen para que sea clickeable siempre */
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
-    cursor: pointer; /* Solo aquí aparece la "manito" */
-	  -webkit-tap-highlight-color: transparent;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #000;
+  text-decoration: none;
+  text-align: center;
+  line-height: 1.1;
+  width: 90%;
+  position: absolute;
+  bottom: 10px;
+  z-index: 15;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Efecto hover solo en el texto */
-.qr-text-link:hover {
-    color: #25D366; /* Un toque verde WhatsApp al pasar el mouse */
-}
+.qr-text-link:hover { color: #25D366; }
 
-/* ============================
-   ESTADOS ACTIVOS (CUANDO SE TOCA EL CUADRO)
-   ============================ */
+.qr-prolijo.qr-active {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
 
 .qr-prolijo.qr-active img {
-    transform: translateY(0) scale(1.6);
+  transform: translateY(0) scale(1.6);
 }
 
-/* Al expandirse, el link desaparece para no estorbar el QR gigante */
 .qr-prolijo.qr-active .qr-text-link {
-    opacity: 0;
-    pointer-events: none; /* Evita clicks accidentales mientras está grande */
-    transform: translateY(10px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
 }
 
-
-/* Texto base: Posicionamiento absoluto en la parte inferior */
-.qr-prolijo span {
-    font-size: 8px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: #000;
-    text-align: center;
-    line-height: 1.1;
-    width: 90%;
-    position: absolute;
-    bottom: 10px; /* Separación segura del borde inferior */
-    z-index: 1;
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* ============================
-   ESTADOS ACTIVOS (CUANDO SE TOCA)
-   ============================ */
-
-/* 1. Sombra sutil en el contenedor para dar efecto de relieve */
-.qr-prolijo.qr-active {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-/* 2. La imagen vuelve al centro exacto (Y=0) y se escala un 160% (cubre los 110px) */
-.qr-prolijo.qr-active img {
-    transform: translateY(0) scale(1.6);
-}
-
-/* 3. El texto se desvanece y se hunde suavemente */
-.qr-prolijo.qr-active span {
-    opacity: 0;
-    transform: translateY(10px);
-    pointer-events: none;
-}
-
-
-/* OPCIONAL: Un efecto visual extra en el cuadro al estar activo */
-.qr-prolijo.qr-active {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-
-
-/* --- FORMULARIO: Filas y Labels --- */
+/* Formulario */
 .f-row {
-    display: flex;
-    gap: 35px;
-    margin-bottom: 35px;
+  display: flex;
+  gap: 35px;
+  margin-bottom: 35px;
 }
 
 .f-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 5px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
 }
 
 .f-group.full { margin-bottom: 30px; }
 
 .f-group label {
-    font-size: 0.65rem;
-    font-weight: 800;
-    color: #888;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #888;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
-/* --- INPUTS & SELECTS: ANTI-SAFARI --- */
-.formulario-final-v3 input, 
-.formulario-final-v3 textarea, 
+.formulario-final-v3 input,
+.formulario-final-v3 textarea,
 .safari-select-fix,
 input[type="date"] {
-    color: #999 !important; 
-    font-family: 'Montserrat', sans-serif !important;
-    font-weight: 400 !important;
-    font-size: 1rem !important;
-    height: 45px !important;
-    width: 100% !important;
-    background-color: transparent !important;
-    border: none !important;
-    border-bottom: 1px solid #ddd !important;
-    border-radius: 0 !important;
-    padding: 0 !important;
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    cursor: pointer;
-    line-height: 45px !important;
+  color: #999;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  height: 45px;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  line-height: 45px;
 }
 
-.formulario-final-v3 input:focus, 
-.formulario-final-v3 textarea:focus, 
+.formulario-final-v3 input:focus,
+.formulario-final-v3 textarea:focus,
 .safari-select-fix:focus {
-    border-bottom: 1px solid #000 !important;
+  border-bottom: 1px solid #000;
+  outline: none;
 }
 
-/* --- ESTILO PARA QUE EL SELECT PAREZCA UN PLACEHOLDER --- */
-
-
-/* Para que cuando despliegues la lista, las opciones sí se vean negras */
 .safari-select-fix option {
-    color: #000 !important;
-    background-color: #fff !important;
+  color: #000;
+  background-color: #fff;
 }
 
-/* Forzamos el gris claro en los placeholders de los inputs */
-.formulario-final-v3 input::placeholder {
-    color: #999 !important;
-    opacity: 1; /* Necesario para Firefox/Safari */
-}
+.formulario-final-v3 input::placeholder { color: #999; opacity: 1; }
+.formulario-final-v3 input::-webkit-input-placeholder { color: #999; }
 
-/* Soporte para Safari/Chrome viejo */
-.formulario-final-v3 input::-webkit-input-placeholder {
-    color: #999 !important;
-}
-
-
-
-/* --- BOTÓN ENVIAR: ANTI-LINK AZUL --- */
 .btn-negro-final-v3 {
-    display: block !important;
-    width: 100% !important;
-    background-color: #000 !important;
-    color: #fff !important;
-    border: none !important;
-    padding: 22px !important;
-    font-family: 'Montserrat', sans-serif !important;
-    font-weight: 900 !important;
-    font-size: 0.85rem !important;
-    letter-spacing: 3px !important;
-    text-transform: uppercase !important;
-    text-align: center !important;
-    cursor: pointer !important;
-    margin-top: 10px;
-    transition: transform 0.2s;
+  display: block;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s;
 }
 
-.btn-negro-final-v3:hover {
-    transform: translateY(-2px);
-}
+.btn-negro-final-v3:hover { transform: translateY(-2px); }
 
-/* Ajuste móvil - Contacto y QR en fila */
 @media (max-width: 800px) {
-    .contacto-header-flex { 
-        flex-direction: column; 
-        align-items: flex-start; 
-        gap: 20px; 
-    }
-    
-    .header-right { 
-        width: 100%; 
-        display: flex; 
-        flex-direction: row !important; /* Fuerza a que queden lado a lado */
-        align-items: center; /* Centra el QR verticalmente respecto a los botones */
-        justify-content: space-between; 
-        gap: 10px;
-    }
-    
-    .social-buttons {
-        flex-grow: 1; /* Los botones ocupan el espacio libre */
-        gap: 8px; /* Achicamos apenas la separación */
-    }
-    
-    .s-btn {
-        padding: 10px 5px; /* Achicamos los botones para que entre todo bien */
-        font-size: 0.6rem;
-    }
-
-    .f-row { 
-        flex-direction: column; 
-        gap: 20px; 
-    }
+  .contacto-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  /* FIX: header-right override mínimo en móvil, no redefinición completa */
+  .header-right {
+    width: 100%;
+  }
+  .s-btn {
+    padding: 10px 5px;
+    font-size: 0.6rem;
+  }
+  .f-row {
+    flex-direction: column;
+    gap: 20px;
+  }
 }
-
-
 
 /* ==========================================================================
-   9. MODALS & DETALLES (Versión Final Corregida)
+   10. MODALS & OVERLAYS
+   FIX: .submenu-overlay usa display:flex siempre; visibilidad por opacity+pointer-events
+        El modal NO necesita display:none inline — JS solo alterna .active
    ========================================================================== */
 .submenu-overlay {
   position: fixed;
@@ -1077,16 +878,18 @@ input[type="date"] {
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
   z-index: 2000;
-  display: none; 
+  display: flex;           /* siempre flex */
   justify-content: center;
   align-items: center;
   padding: 30px;
   opacity: 0;
+  pointer-events: none;   /* invisible y no interactuable por defecto */
   transition: opacity 0.4s var(--bezier), backdrop-filter 0.4s var(--bezier);
 }
 
 .submenu-overlay.active {
   opacity: 1;
+  pointer-events: auto;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -1100,11 +903,10 @@ input[type="date"] {
   border-radius: 4px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.3);
   overflow: hidden;
-  /* CORRECCIÓN: Sintaxis de transición y altura animable */
   opacity: 0;
   transform: translateY(40px);
   transition: transform 0.5s var(--bezier), opacity 0.5s var(--bezier), height 0.4s var(--bezier);
-  height: auto; 
+  height: auto;
 }
 
 .submenu-overlay.active .detalle-inner {
@@ -1123,8 +925,6 @@ input[type="date"] {
   opacity: 1;
 }
 
-
-/* Header del Modal */
 .modal-header {
   display: flex;
   flex-direction: column;
@@ -1163,12 +963,12 @@ input[type="date"] {
   transition: all 0.3s var(--bezier);
 }
 
-.detalle-inner .tab-btn.active, .detalle-inner .tab-btn:hover {
+.detalle-inner .tab-btn.active,
+.detalle-inner .tab-btn:hover {
   background: var(--text-primary);
   color: var(--white);
 }
 
-/* Botón Volver Prolijo a la Derecha */
 #volver-btn {
   position: absolute;
   top: 15px;
@@ -1187,27 +987,8 @@ input[type="date"] {
 
 #volver-btn:hover { color: var(--text-primary); }
 
-/* Contenido de Pestañas */
-.tab-content {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.tab-content.active {
-  display: block;
-  opacity: 1;
-}
-
-/* Blur para el fondo de la página */
-.blur-background {
-  filter: blur(5px);
-  transition: filter 0.4s var(--bezier);
-}
-
-/* Estilo para las listas dentro del contenido */
 .tab-content ul {
-  list-style-type: none; /* Listas minimalistas */
+  list-style-type: none;
   padding-left: 0;
 }
 
@@ -1217,7 +998,6 @@ input[type="date"] {
   position: relative;
 }
 
-/* Viñeta minimalista */
 .tab-content ul li::before {
   content: '•';
   position: absolute;
@@ -1231,27 +1011,14 @@ input[type="date"] {
   font-weight: 700;
 }
 
-/* Ajustes para Móviles */
 @media (max-width: 600px) {
-  .detalle-inner {
-    padding: 25px;
-  }
-  
-  #detalle-titulo {
-    font-size: 1.6rem;
-    letter-spacing: 2px;
-  }
-  
-  .detalle-inner .tab-btn {
-    font-size: 0.6rem;
-    padding: 8px 15px;
-    letter-spacing: 1px;
-  }
+  .detalle-inner { padding: 25px; }
+  #detalle-titulo { font-size: 1.6rem; letter-spacing: 2px; }
+  .detalle-inner .tab-btn { font-size: 0.6rem; padding: 8px 15px; letter-spacing: 1px; }
 }
 
-
 /* ==========================================================================
-   10. MOBILE RESPONSIVE
+   11. MOBILE RESPONSIVE
    ========================================================================== */
 @media (max-width: 850px) {
   .section h2[data-i18n] {
@@ -1259,52 +1026,26 @@ input[type="date"] {
     letter-spacing: 4px;
     margin-bottom: 40px;
   }
-  .hero-editorial { flex-direction: column; text-align: center; padding-top: 40px; gap: 30px; }
-  .hero-image-container {width: 100%; height: 40vh; min-height: 250px;}
-  .hero-content h1 { font-size: 2.2rem; line-height: 1.1; }
-  .hero-subtitle { margin: 0 auto 30px; }
-/* El contenedor de los 3 tips */
-.editorial-grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important; /* Fuerza 3 columnas iguales */
-  gap: 20px !important;
-  padding: 0 5% !important;
-  margin-top: -30px; /* Para que muerda un poco la imagen de arriba y se note continuidad */
-}
-
-
-
-
   .surftrips-gallery { grid-template-columns: repeat(2, 1fr); }
-  .inputs-grid { grid-template-columns: 1fr; }
-  
-  /* ESTA ES LA PARTE CORREGIDA */
-  .grid-item.tall img {
-    height: 350px !important; 
-  }
 }
-
 
 /* ==========================================================================
-   11. FOOTER (Re-design Editorial)
+   12. FOOTER
    ========================================================================== */
 footer {
   margin-top: auto;
-  flex-shrink:0;
-  bottom: 0;
-  z-index: 10;
+  flex-shrink: 0;
   background: var(--bg-main);
   color: var(--accent-gray);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);  
+  -webkit-backdrop-filter: blur(10px);
   text-align: center;
-  padding: 20px 4% 20px;
+  padding: 20px 4%;
   border-top: 1px solid var(--divider);
   font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 2px;
 }
-
 
 footer span {
   display: block;
@@ -1312,51 +1053,15 @@ footer span {
   opacity: 0.7;
 }
 
-/* Suavizado de scroll para móviles */
 * {
   -webkit-overflow-scrolling: touch;
 }
 
-header {
-  /* Evita parpadeos al scrollear */
-  -webkit-transform: translateZ(0);
-		justify-content: center;
-		gap: 40px
-}
-
-
-
-.btn-negro-final {
-    width: 100%;
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 20px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    cursor: pointer;
-    margin-top: 20px;
-}
-
-/* Ajuste móvil */
-@media (max-width: 800px) {
-    .contacto-header-flex { flex-direction: column; align-items: flex-start; }
-    .header-right { width: 100%; flex-direction: column; align-items: flex-start; }
-    .f-row { flex-direction: column; gap: 20px; }
-}
-
-
 /* ==========================================================================
-   12. LIGHTBOX GALERÍA
+   13. LIGHTBOX
    ========================================================================== */
 #lightbox {
-  display: none; /* Oculto por defecto */
   flex-direction: column;
-}
-
-#lightbox.active {
-  display: flex;
-  animation: fadeIn 0.4s forwards;
 }
 
 #lightbox-img {
@@ -1364,7 +1069,7 @@ header {
   max-width: 90vw;
   object-fit: contain;
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  transition: opacity 0.3s ease; /* Para transición entre fotos */
+  transition: opacity 0.3s ease;
 }
 
 .close-lightbox {
@@ -1399,54 +1104,45 @@ header {
 #prev-img { left: 30px; }
 #next-img { right: 30px; }
 
-
+/* ==========================================================================
+   14. MOBILE NAV
+   ========================================================================== */
 @media (max-width: 768px) {
-    header nav {
-        position: relative;
-        flex-grow: 1;
-        /* Degradado más marcado (del 70% al 98%) */
-        -webkit-mask-image: linear-gradient(to right, black 70%, transparent 98%);
-        mask-image: linear-gradient(to right, black 70%, transparent 98%);
-        overflow: hidden;
-		flex-grow: 0;
-		margin-left: auto;
-		margin-right: 30px;
-    }
+  header nav {
+    position: relative;
+    flex-grow: 0;
+    margin-left: auto;
+    margin-right: 30px;
+    -webkit-mask-image: linear-gradient(to right, black 70%, transparent 98%);
+    mask-image: linear-gradient(to right, black 70%, transparent 98%);
+    overflow: hidden;
+  }
 
-    header nav ul {
-        display: flex;
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
-        overflow-y: hidden;
-        gap: 20px !important;
-        padding-right: 60px; /* Más aire al final para que el degradado "muerda" el texto */
-        scrollbar-width: none; 
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    header nav ul li:last-child {
-        padding-right: 20px; /* Asegura que el último link no quede cortado al scrollear al final */
-    }
+  header nav ul {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 20px;
+    padding-right: 60px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  header nav ul::-webkit-scrollbar { display: none; }
+
+  header nav ul li:last-child { padding-right: 20px; }
+
+  header nav ul li a {
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 10px;
+  }
 }
-
-
-    /* Esto asegura que el menú pueda "chocar" contra las banderas al scrollear */
-    .lang-switch {
-		display: flex;
-		align-items: center;
-        flex-shrink: 0; 
-		gap: 10px;
-    }
-}
-
-    
-    header nav ul::-webkit-scrollbar {
-        display: none;
-    }
-
-    header nav ul li a {
-        font-size: 11px !important; 
-        white-space: nowrap; 
-    }
-}
-
+/* FIX: stray closing brace removed — was here before, breaking cascade */
