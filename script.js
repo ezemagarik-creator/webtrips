@@ -2,6 +2,15 @@
  * script.js — Ezequiel Magarik Portfolio
  */
 
+/* ============================
+   EMAILJS INIT
+   (movido desde el HTML inline)
+   ============================ */
+emailjs.init({ publicKey: "Cq9PacH-N_N_hZ344" });
+
+/* ============================
+   HELPERS
+   ============================ */
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
@@ -16,6 +25,9 @@ function trapFocus(modal, e) {
   else            { if (document.activeElement === els[els.length-1]) { e.preventDefault(); els[0].focus(); } }
 }
 
+/* Respeta prefers-reduced-motion para autoplay de carruseles y slider */
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ============================
    SERVICIOS DATA
    ============================ */
@@ -29,12 +41,13 @@ const SERVICIOS = {
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- refs ---- */
-  const header      = $('header');
-  const sections    = $$('.section');
-  const navLinks    = $$('nav a');
-  const spaLinks    = $$('[data-section]');
-  const byId        = Object.fromEntries(sections.map(s => [s.id, s]));
-  let   current     = location.hash.replace('#','') || 'home';
+  const header   = $('header');
+  const sections = $$('.section');
+  const navLinks = $$('nav a');
+  /* data-section sigue en los botones CTA del hero; nav links usan href */
+  const spaLinks = $$('[data-section], nav a[href^="#"]');
+  const byId     = Object.fromEntries(sections.map(s => [s.id, s]));
+  let   current  = location.hash.replace('#','') || 'home';
 
   /* ---- nav indicator ---- */
   const ind = document.createElement('div');
@@ -47,13 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
     ind.style.left  = a.offsetLeft  + 'px';
   }
 
-  /* ---- SPA switch — NO isAnimating lock (was silently eating clicks) ---- */
+  /* ---- SPA switch ---- */
   function go(id) {
     if (!byId[id]) return;
     sections.forEach(s => s.classList.remove('active'));
     byId[id].classList.add('active');
     navLinks.forEach(a => {
-      const t = a.dataset.section || a.getAttribute('href').replace('#','');
+      /* deriva el id desde el href en lugar de dataset.section */
+      const t = a.getAttribute('href').replace('#','');
       a.classList.toggle('active', t === id);
       if (t === id) moveInd(a);
     });
@@ -62,9 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ---- click handlers ---- */
+  /* Evita listeners duplicados con un Set de elementos ya procesados */
+  const registered = new WeakSet();
   spaLinks.forEach(el => {
+    if (registered.has(el)) return;
+    registered.add(el);
     el.addEventListener('click', e => {
-      const id = el.dataset.section;
+      const raw = el.dataset.section || el.getAttribute('href') || '';
+      const id  = raw.replace('#','');
       if (!id || !byId[id]) return;
       e.preventDefault();
       history.pushState({ section:id }, '', '#' + id);
@@ -76,13 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
     go(e.state?.section || location.hash.replace('#','') || 'home');
   });
 
-  /* ---- obfuscated email ---- */
+  /* ---- email obfuscado ---- */
   const mail = ['ezemagarik','gmail.com'].join('@');
   $$('.js-mailto-btn').forEach(el => { el.href = 'mailto:' + mail; });
 
   /* ---- init ---- */
   go(current);
-  setTimeout(() => moveInd($(`nav a[data-section="${current}"]`)), 300);
+  /* replaceState para que el Back del browser tenga estado desde el primer render */
+  history.replaceState({ section: current }, '', '#' + current);
+  /* moveInd con rAF en lugar del setTimeout(300) — misma solución, más limpio */
+  requestAnimationFrame(() => moveInd($(`nav a[href="#${current}"]`)));
 
   /* mobile nav hint */
   const ul = $('nav ul');
@@ -91,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ============================
-     CAROUSEL
+     CAROUSEL (frases / proceso)
      ============================ */
   const cw = $('#resenasCarousel');
   if (cw) {
@@ -103,18 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
     cw.innerHTML = '';
     cw.appendChild(track);
 
-    let x=0, dragging=false, startX=0, startScroll=0, dragH=null, dragStartY=0, visible=true;
+    let x=0, dragging=false, startX=0, startScroll=0, dragH=null, dragStartY=0;
+    let carouselVisible=true, tabVisible=!document.hidden;
 
-    new IntersectionObserver(([e]) => visible = e.isIntersecting, {threshold:.1}).observe(cw);
+    new IntersectionObserver(([e]) => carouselVisible = e.isIntersecting, {threshold:.1}).observe(cw);
 
-    (function tick() {
-      if (visible && !dragging) {
-        x -= 0.6;
-        if (-x >= track.scrollWidth/2) x = 0;
-        track.style.transform = `translateX(${x}px)`;
-      }
-      requestAnimationFrame(tick);
-    })();
+    /* pausa cuando la pestaña está oculta → ahorra CPU */
+    document.addEventListener('visibilitychange', () => { tabVisible = !document.hidden; });
+
+    if (!reducedMotion) {
+      (function tick() {
+        if (carouselVisible && !dragging && tabVisible) {
+          x -= 0.6;
+          if (-x >= track.scrollWidth / 2) x = 0;
+          track.style.transform = `translateX(${x}px)`;
+        }
+        requestAnimationFrame(tick);
+      })();
+    }
 
     track.addEventListener('pointerdown', e => {
       dragging=true; dragH=null; startX=e.clientX; dragStartY=e.clientY; startScroll=x;
@@ -132,15 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
       track.style.transform=`translateX(${x}px)`;
     },{passive:false});
     const end = () => { dragging=false; dragH=null; track.style.cursor='grab'; };
-    track.addEventListener('pointerup',end);
-    track.addEventListener('pointerleave',end);
+    track.addEventListener('pointerup', end);
+    track.addEventListener('pointerleave', end);
   }
 
   /* ============================
      SLIDER ENGINE
      ============================ */
   $$('.slider-wrapper').forEach(wrap => {
-    const track = wrap.querySelector('.slider-track');
+    const track  = wrap.querySelector('.slider-track');
     const slides = wrap.querySelectorAll('.slide');
     const dotsEl = wrap.querySelector('.slider-dots');
     if (!track || !slides.length || !dotsEl) return;
@@ -170,32 +198,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const play    = () => { clearInterval(timer); timer = setInterval(() => { idx=(idx+1)%slides.length; render(); }, 3800); };
     const stop    = () => clearInterval(timer);
-    const restart = () => { stop(); play(); };
+    const restart = () => { stop(); if(!reducedMotion) play(); };
 
+    /* pausa automática cuando el slider está fuera del viewport */
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { if (!reducedMotion) play(); }
+      else stop();
+    }, { threshold: 0.1 }).observe(wrap);
+
+    /* navegación por teclado: ArrowLeft / ArrowRight */
+    wrap.setAttribute('tabindex', '0');
+    wrap.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft')  { idx = Math.max(0, idx - 1); render(); restart(); }
+      if (e.key === 'ArrowRight') { idx = Math.min(slides.length - 1, idx + 1); render(); restart(); }
+    });
+
+    /* swipe táctil */
     let tx=0;
     wrap.addEventListener('touchstart', e => { stop(); tx=e.changedTouches[0].screenX; },{passive:true});
     wrap.addEventListener('touchend',   e => {
       const d=tx-e.changedTouches[0].screenX;
       if (Math.abs(d)>50) { if(d>0&&idx<slides.length-1)idx++; else if(d<0&&idx>0)idx--; }
-      render(); play();
+      render(); if (!reducedMotion) play();
     },{passive:true});
 
     let rTimer;
     window.addEventListener('resize', () => { clearTimeout(rTimer); rTimer=setTimeout(render,100); });
-    play();
+
+    /* autoplay solo si el usuario no pidió menos movimiento */
+    if (!reducedMotion) play();
   });
 
   /* ============================
      MODAL
      ============================ */
-  const modal     = $('#servicio-modal');
-  const modalTitle= $('#modal-titulo');
-  const modalList = $('#modal-list');
-  const modalClose= $('#modal-close');
+  const modal      = $('#servicio-modal');
+  const modalTitle = $('#modal-titulo');
+  const modalList  = $('#modal-list');
+  const modalClose = $('#modal-close');
 
   function openModal(key) {
     const d = SERVICIOS[key];
-    if (!d||!modal) return;
+    if (!d || !modal) return;
     modalTitle.textContent = d.titulo;
     modalList.innerHTML = d.items.map(i=>`<li>${i}</li>`).join('');
     modal.setAttribute('aria-hidden','false');
@@ -232,18 +276,58 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ============================
+     VALIDACIÓN DE FORMULARIO
+     ============================ */
+  function validateForm(form) {
+    /* limpia errores previos */
+    form.querySelectorAll('.f-error').forEach(e => e.remove());
+    let ok = true;
+
+    form.querySelectorAll('[required]').forEach(field => {
+      const empty    = !field.value.trim();
+      const badEmail = field.type === 'email' && field.value.trim() &&
+                       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value);
+
+      if (empty || badEmail) {
+        const msg = document.createElement('span');
+        msg.className   = 'f-error';
+        msg.textContent = badEmail ? 'Email inválido' : 'Campo requerido';
+        field.closest('.f-group').appendChild(msg);
+        ok = false;
+      }
+    });
+
+    return ok;
+  }
+
+  /* ============================
      CONTACT FORM
      ============================ */
   $('.contacto-form')?.addEventListener('submit', function(e) {
     e.preventDefault();
+
+    /* honeypot check */
     const honey = this.querySelector('[name="_honey"]');
     if (honey?.value) return;
-    const btn = this.querySelector('.btn-submit');
+
+    /* validación cliente */
+    if (!validateForm(this)) return;
+
+    const btn  = this.querySelector('.btn-submit');
     const orig = btn.innerHTML;
     btn.innerHTML = '<span>ENVIANDO...</span>'; btn.disabled=true;
+
     emailjs.sendForm('service_v95fe07','template_nrxcwun',this)
-      .then(()  => { btn.innerHTML='<span>✓ ENVIADO</span>'; this.reset(); setTimeout(()=>{btn.innerHTML=orig;btn.disabled=false;},3000); })
-      .catch(err => { console.error(err); btn.innerHTML='<span>ERROR — INTENTÁ DE NUEVO</span>'; setTimeout(()=>{btn.innerHTML=orig;btn.disabled=false;},3000); });
+      .then(()  => {
+        btn.innerHTML='<span>✓ ENVIADO</span>';
+        this.reset();
+        setTimeout(()=>{ btn.innerHTML=orig; btn.disabled=false; }, 3000);
+      })
+      .catch(err => {
+        console.error(err);
+        btn.innerHTML='<span>ERROR — INTENTÁ DE NUEVO</span>';
+        setTimeout(()=>{ btn.innerHTML=orig; btn.disabled=false; }, 3000);
+      });
   });
 
 }); // end DOMContentLoaded
